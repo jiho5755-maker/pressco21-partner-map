@@ -5,447 +5,389 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>전국 파트너 공방 찾기 - 프레스코21</title>
   
-  <!-- 네이버 지도 API: 발급받은 Client ID로 교체하세요 -->
-  <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=YOUR_CLIENT_ID"></script>
+  <!-- 네이버 지도 API -->
+  <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=bfp8odep5r"></script>
   
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 16px; line-height: 1.7; color: #2C2C2C; background-color: #F9F8F5; }
-    .page-header { background: linear-gradient(135deg, #7B8E7E 0%, #5A6B5D 100%); color: white; padding: 48px 20px; text-align: center; }
-    .page-title { font-size: 28px; font-weight: bold; margin-bottom: 12px; }
-    .page-subtitle { font-size: 16px; opacity: 0.95; }
-    .loading-notice { background-color: #E3F2FD; border: 2px solid #2196F3; border-radius: 12px; padding: 20px; margin: 20px auto; max-width: 1280px; text-align: center; }
-    .loading-notice h3 { color: #1976D2; margin-bottom: 10px; font-size: 18px; }
-    .filter-section { background-color: white; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
-    .filter-container { display: flex; gap: 16px; flex-wrap: wrap; max-width: 1280px; margin: 0 auto; }
-    .filter-group { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 200px; }
-    .filter-label { font-size: 14px; font-weight: 600; color: #666; }
-    .filter-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
-    .filter-btn { padding: 10px 16px; font-size: 14px; background-color: #F9F8F5; border: 2px solid #E5E3DC; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
-    .filter-btn:hover { border-color: #7B8E7E; background-color: #9FB0A2; color: white; }
-    .filter-btn.active { background-color: #7B8E7E; color: white; border-color: #7B8E7E; font-weight: 600; }
-    .map-content { display: grid; grid-template-columns: 350px 1fr; gap: 0; max-width: 1280px; margin: 20px auto; box-shadow: 0 4px 16px rgba(0,0,0,0.15); border-radius: 16px; overflow: hidden; background-color: white; height: 600px; }
-    .workshop-list { background-color: #FFFEF9; overflow-y: auto; border-right: 1px solid #E5E3DC; }
-    .workshop-list-header { padding: 20px; background-color: white; border-bottom: 2px solid #E5E3DC; position: sticky; top: 0; z-index: 10; }
-    .workshop-count { font-size: 16px; font-weight: 600; color: #7B8E7E; }
-    .workshop-item { padding: 16px; border-bottom: 1px solid #F0EFE9; cursor: pointer; transition: all 0.3s; background-color: white; margin: 8px; border-radius: 8px; }
-    .workshop-item:hover, .workshop-item.active { background-color: #7B8E7E; color: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transform: translateX(4px); }
-    .workshop-badge { display: inline-block; background-color: #B5A48B; color: white; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-bottom: 8px; }
-    .workshop-item:hover .workshop-badge, .workshop-item.active .workshop-badge { background-color: white; color: #7B8E7E; }
-    .workshop-name { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
-    .workshop-genres { font-size: 13px; color: #666; margin-bottom: 6px; }
-    .workshop-item:hover .workshop-genres, .workshop-item.active .workshop-genres { color: white; opacity: 0.9; }
-    .workshop-address { font-size: 13px; color: #666; margin-bottom: 8px; }
-    .workshop-item:hover .workshop-address, .workshop-item.active .workshop-address { color: white; opacity: 0.85; }
-    .workshop-contact { display: flex; gap: 6px; margin-top: 10px; }
-    .contact-btn { flex: 1; padding: 8px; background-color: #F9F8F5; border: 1px solid #E5E3DC; border-radius: 6px; font-size: 12px; cursor: pointer; transition: all 0.2s; text-align: center; }
-    .contact-btn:hover { background-color: #7B8E7E; color: white; border-color: #7B8E7E; }
-    .workshop-item.active .contact-btn { background-color: white; border-color: white; color: #7B8E7E; }
-    .map-container { position: relative; height: 600px; background-color: #E5E3DC; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; background: #F9F8F5; }
+    
+    .header { background: linear-gradient(135deg, #7B8E7E 0%, #5A6B5D 100%); color: white; padding: 48px 20px; text-align: center; }
+    .header h1 { font-size: 32px; margin-bottom: 12px; }
+    .header p { font-size: 16px; opacity: 0.95; }
+    
+    .status { max-width: 1280px; margin: 20px auto; padding: 20px; background: white; border-radius: 12px; text-align: center; }
+    .status.loading { background: #E3F2FD; color: #1976D2; }
+    .status.error { background: #FFEBEE; color: #D32F2F; }
+    .status.success { background: #E8F5E9; color: #388E3C; }
+    
+    .container { max-width: 1280px; margin: 20px auto; padding: 0 20px; }
+    
+    .filters { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .filter-group { margin-bottom: 16px; }
+    .filter-label { font-size: 14px; font-weight: 600; color: #666; margin-bottom: 8px; display: block; }
+    .filter-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-btn { padding: 10px 16px; background: #F5F5F5; border: 2px solid #E0E0E0; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+    .filter-btn:hover { background: #7B8E7E; color: white; border-color: #7B8E7E; }
+    .filter-btn.active { background: #7B8E7E; color: white; border-color: #7B8E7E; font-weight: 600; }
+    
+    .content { display: grid; grid-template-columns: 350px 1fr; gap: 20px; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+    
+    .list { background: #FFFEF9; max-height: 600px; overflow-y: auto; padding: 20px; }
+    .list-header { font-size: 16px; font-weight: 600; color: #7B8E7E; margin-bottom: 16px; }
+    .workshop-card { background: white; padding: 16px; margin-bottom: 12px; border-radius: 8px; cursor: pointer; transition: all 0.3s; border: 2px solid transparent; }
+    .workshop-card:hover, .workshop-card.active { background: #7B8E7E; color: white; border-color: #7B8E7E; transform: translateX(4px); }
+    .workshop-card .badge { display: inline-block; background: #B5A48B; color: white; padding: 4px 10px; border-radius: 4px; font-size: 11px; margin-bottom: 8px; }
+    .workshop-card:hover .badge { background: white; color: #7B8E7E; }
+    .workshop-card .name { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+    .workshop-card .genres { font-size: 13px; color: #666; margin-bottom: 6px; }
+    .workshop-card:hover .genres { color: white; opacity: 0.9; }
+    .workshop-card .address { font-size: 13px; color: #666; margin-bottom: 12px; }
+    .workshop-card:hover .address { color: white; opacity: 0.85; }
+    .workshop-card .contact { display: flex; gap: 8px; }
+    .workshop-card .contact-btn { flex: 1; padding: 8px; background: #F5F5F5; border-radius: 6px; font-size: 12px; text-align: center; cursor: pointer; }
+    .workshop-card:hover .contact-btn { background: white; color: #7B8E7E; }
+    
+    .map-wrapper { position: relative; height: 600px; }
     #map { width: 100%; height: 100%; }
-    .map-loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #666; font-size: 16px; z-index: 1000; }
-    .map-loading.hidden { display: none; }
-    .custom-infowindow { background-color: white; border-radius: 12px; padding: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); min-width: 250px; max-width: 300px; }
-    .info-badge { display: inline-block; background: linear-gradient(135deg, #B5A48B, #968870); color: white; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-bottom: 10px; }
-    .info-name { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: #2C2C2C; }
-    .info-genres { font-size: 13px; color: #666; margin-bottom: 6px; }
-    .info-address { font-size: 13px; color: #666; margin-bottom: 10px; }
-    .info-actions { display: flex; gap: 6px; }
-    .info-btn { flex: 1; padding: 8px; background-color: #7B8E7E; color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; transition: all 0.2s; }
-    .info-btn:hover { background-color: #5A6B5D; }
-    @media (max-width: 1024px) { 
-      .map-content { grid-template-columns: 1fr; height: auto; } 
-      .workshop-list { max-height: 400px; border-right: none; border-bottom: 1px solid #E5E3DC; } 
-      .map-container { height: 500px; } 
-    }
-    @media (max-width: 768px) { 
-      .filter-container { flex-direction: column; } 
-      .filter-group { min-width: 100%; } 
-      .page-title { font-size: 24px; }
-      .page-subtitle { font-size: 14px; }
+    .map-loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; font-size: 18px; color: #666; }
+    
+    @media (max-width: 1024px) {
+      .content { grid-template-columns: 1fr; }
+      .list { max-height: 400px; }
     }
   </style>
 </head>
 <body>
   
-  <div class="page-header">
-    <h1 class="page-title">🗺️ 전국 파트너 공방 찾기</h1>
-    <p class="page-subtitle">이진선 장인의 공식 인증을 받은 전국의 파트너 공방들을 만나보세요</p>
+  <div class="header">
+    <h1>🗺️ 전국 파트너 공방 찾기</h1>
+    <p>이진선 장인의 공식 인증을 받은 전국의 파트너 공방들을 만나보세요</p>
   </div>
   
-  <div id="loading-notice" class="loading-notice">
-    <h3>📊 데이터를 불러오는 중입니다...</h3>
+  <div id="status" class="status loading">
+    <h3>📊 데이터를 불러오는 중...</h3>
     <p>잠시만 기다려주세요.</p>
   </div>
   
-  <div class="filter-section">
-    <div class="filter-container">
+  <div class="container">
+    <div class="filters">
       <div class="filter-group">
         <span class="filter-label">📍 지역</span>
-        <div class="filter-buttons" id="region-filters">
+        <div class="filter-btns" id="regionFilters">
           <button class="filter-btn active" data-region="all">전체</button>
-          <!-- 구글 시트에서 동적으로 생성됩니다 -->
         </div>
       </div>
-      
       <div class="filter-group">
         <span class="filter-label">🎨 공예 종류</span>
-        <div class="filter-buttons" id="genre-filters">
+        <div class="filter-btns" id="genreFilters">
           <button class="filter-btn active" data-genre="all">전체</button>
-          <!-- 구글 시트에서 동적으로 생성됩니다 -->
         </div>
       </div>
     </div>
-  </div>
-  
-  <div class="map-content">
-    <div class="workshop-list">
-      <div class="workshop-list-header">
-        <div class="workshop-count"><span id="visible-count">0</span>개의 파트너 공방</div>
-      </div>
-      <div id="workshop-list-container"></div>
-    </div>
     
-    <div class="map-container">
-      <div id="map"></div>
-      <div class="map-loading" id="map-loading">
-        <div style="font-size: 48px; margin-bottom: 16px;">🗺️</div>
-        <div>지도를 불러오는 중...</div>
+    <div class="content">
+      <div class="list">
+        <div class="list-header"><span id="count">0</span>개의 파트너 공방</div>
+        <div id="workshopList"></div>
+      </div>
+      <div class="map-wrapper">
+        <div id="map"></div>
+        <div class="map-loading" id="mapLoading">🗺️<br>지도 로딩 중...</div>
       </div>
     </div>
   </div>
   
   <script>
-    // ========================================
-    // 🔧 설정: 여기만 수정하세요!
-    // ========================================
+    // =============================================
+    // 🔧 설정 (여기만 수정하세요!)
+    // =============================================
+    const CONFIG = {
+      // 구글 시트 API URL (Apps Script 웹 앱 URL)
+      GOOGLE_SHEET_API: 'https://script.google.com/macros/s/AKfycbxSzu3XpVNMC4aHFzlZOCE--BmpH3b8y57NAfLnF2gxdjH93RgF4f96Z44gxSTo7rl1/exec',
+      
+      // 디버그 모드
+      DEBUG: true
+    };
     
-    // Google Apps Script 웹 앱 URL (구글시트-데이터관리-시스템.md 참고)
-    var GOOGLE_SHEET_API_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
-    //                          ↑↑↑ 여기에 발급받은 URL을 붙여넣으세요
-    
-    // ========================================
+    // =============================================
     // 전역 변수
-    // ========================================
-    var workshopsData = [];
-    var map = null;
-    var markers = [];
-    var infowindows = [];
-    var currentFilters = { region: 'all', genre: 'all' };
+    // =============================================
+    let workshopsData = [];
+    let naverMap = null;
+    let markers = [];
+    let currentFilters = { region: 'all', genre: 'all' };
     
-    // ========================================
+    // =============================================
+    // 유틸리티
+    // =============================================
+    function log(...args) {
+      if (CONFIG.DEBUG) console.log('[파트너맵]', ...args);
+    }
+    
+    function showStatus(type, title, msg) {
+      const el = document.getElementById('status');
+      el.className = `status ${type}`;
+      el.innerHTML = `<h3>${title}</h3><p>${msg}</p>`;
+      el.style.display = 'block';
+    }
+    
+    function hideStatus() {
+      document.getElementById('status').style.display = 'none';
+    }
+    
+    // =============================================
     // 데이터 로드
-    // ========================================
-    function loadWorkshopsData() {
-      fetch(GOOGLE_SHEET_API_URL)
-        .then(function(response) { 
-          if (!response.ok) {
-            throw new Error('API 응답 오류: ' + response.status);
-          }
-          return response.json(); 
-        })
-        .then(function(data) {
-          console.log('로드된 데이터:', data);
-          
-          // 데이터 구조 확인
-          if (data.workshops) {
-            workshopsData = data.workshops;
-            
-            // 동적 필터 생성
-            if (data.regions && data.genres) {
-              createDynamicFilters(data.regions, data.genres);
-            }
-          } else {
-            // 이전 버전 호환 (workshops 키가 없는 경우)
-            workshopsData = data;
-          }
-          
-          // 로딩 메시지 숨김
-          var loadingNotice = document.getElementById('loading-notice');
-          if (loadingNotice) loadingNotice.style.display = 'none';
-          
-          // 지도 및 리스트 렌더링
-          renderWorkshopList();
-          if (map) {
-            createMarkers();
-            filterMarkers();
-          }
-        })
-        .catch(function(error) {
-          console.error('데이터 로드 실패:', error);
-          var loadingNotice = document.getElementById('loading-notice');
-          if (loadingNotice) {
-            loadingNotice.innerHTML = '<h3 style="color: #C17B7B;">⚠️ 데이터를 불러올 수 없습니다</h3>' +
-              '<p>구글 시트 API URL을 확인해주세요.<br>' +
-              '자세한 내용은 개발자 도구(F12) 콘솔을 확인하세요.</p>';
-          }
-        });
-    }
-    
-    // ========================================
-    // 동적 필터 생성
-    // ========================================
-    function createDynamicFilters(regions, genres) {
-      // 지역 필터 생성
-      var regionContainer = document.getElementById('region-filters');
-      regionContainer.innerHTML = '<button class="filter-btn active" data-region="all">전체</button>';
+    // =============================================
+    async function loadData() {
+      log('데이터 로드 시작');
+      showStatus('loading', '📊 데이터를 불러오는 중...', '잠시만 기다려주세요.');
       
-      regions.forEach(function(region) {
-        var btn = document.createElement('button');
-        btn.className = 'filter-btn';
-        btn.setAttribute('data-region', region);
-        btn.textContent = region;
-        regionContainer.appendChild(btn);
-      });
-      
-      // 공예 종류 필터 생성
-      var genreContainer = document.getElementById('genre-filters');
-      genreContainer.innerHTML = '<button class="filter-btn active" data-genre="all">전체</button>';
-      
-      genres.forEach(function(genre) {
-        var btn = document.createElement('button');
-        btn.className = 'filter-btn';
-        btn.setAttribute('data-genre', genre);
-        btn.textContent = genre;
-        genreContainer.appendChild(btn);
-      });
-      
-      // 필터 이벤트 재등록
-      initFilters();
-    }
-    
-    // ========================================
-    // 지도 초기화
-    // ========================================
-    function initMap() {
       try {
-        document.getElementById('map-loading').classList.add('hidden');
-        var mapOptions = {
-          center: new naver.maps.LatLng(37.5665, 126.9780),
-          zoom: 11,
-          zoomControl: true,
-          zoomControlOptions: { position: naver.maps.Position.TOP_RIGHT },
-          mapTypeControl: true
-        };
-        map = new naver.maps.Map('map', mapOptions);
+        const response = await fetch(CONFIG.GOOGLE_SHEET_API);
+        log('응답 받음:', response.status);
         
-        // 데이터가 이미 로드되었으면 마커 생성
-        if (workshopsData.length > 0) {
-          createMarkers();
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
         }
-      } catch (error) {
-        console.error('지도 초기화 실패:', error);
-        document.getElementById('map-loading').innerHTML = '<div style="color: #C17B7B;"><div style="font-size: 48px; margin-bottom: 16px;">⚠️</div><div>지도를 불러올 수 없습니다</div><div style="font-size:12px; margin-top:8px;">네이버 지도 API 키를 확인해주세요</div></div>';
-      }
-    }
-    
-    // ========================================
-    // 마커 생성
-    // ========================================
-    function createMarkers() {
-      // 기존 마커 제거
-      markers.forEach(function(item) {
-        item.marker.setMap(null);
-      });
-      markers = [];
-      infowindows = [];
-      
-      workshopsData.forEach(function(workshop) {
-        // 위도/경도가 없으면 건너뜀
-        if (!workshop.lat || !workshop.lng) {
-          console.warn('좌표 없음:', workshop.name);
+        
+        const data = await response.json();
+        log('데이터:', data);
+        
+        if (data.error || !data.workshops) {
+          throw new Error(data.message || '데이터 형식 오류');
+        }
+        
+        workshopsData = data.workshops;
+        
+        if (workshopsData.length === 0) {
+          showStatus('error', '⚠️ 표시할 공방이 없습니다', '구글 시트에 데이터를 입력해주세요.');
           return;
         }
         
-        var position = new naver.maps.LatLng(workshop.lat, workshop.lng);
-        var marker = new naver.maps.Marker({
-          position: position,
-          map: map,
-          title: workshop.name,
-          icon: {
-            content: '<div style="background-color: #7B8E7E; color: white; padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,0.2); white-space: nowrap; cursor: pointer;">📍 ' + workshop.name + '</div>',
-            anchor: new naver.maps.Point(0, 0)
-          }
-        });
+        // 필터 생성
+        if (data.regions && data.genres) {
+          createFilters(data.regions, data.genres);
+        }
         
-        var genresText = workshop.genres.map(function(g) {
-          var icons = { '압화': '🌸', '레진': '💎', '하바리움': '🌿', '부케기프트': '💐' };
-          return (icons[g] || '🎨') + ' ' + g;
-        }).join(' | ');
+        hideStatus();
+        renderList();
         
-        var infoContent = '<div class="custom-infowindow"><span class="info-badge">⭐ 공식 파트너</span><div class="info-name">' + workshop.name + '</div><div class="info-genres">' + genresText + '</div><div class="info-address">📍 ' + workshop.address + '</div><div class="info-actions"><button class="info-btn" onclick="openInstagram(\'' + workshop.instagram + '\')">📷 인스타</button><button class="info-btn" onclick="callPhone(\'' + workshop.phone + '\')">📞 전화</button></div></div>';
+        if (naverMap) {
+          createMarkers();
+        }
         
-        var infowindow = new naver.maps.InfoWindow({
-          content: infoContent,
-          backgroundColor: 'transparent',
-          borderWidth: 0,
-          disableAnchor: true,
-          pixelOffset: new naver.maps.Point(0, -10)
-        });
+        showStatus('success', '✅ 로드 완료!', `${workshopsData.length}개의 파트너 공방을 찾았습니다.`);
+        setTimeout(hideStatus, 2000);
         
-        naver.maps.Event.addListener(marker, 'click', function() {
-          infowindows.forEach(function(iw) { iw.close(); });
-          infowindow.open(map, marker);
-          map.panTo(position);
-          selectWorkshopItem(workshop.id);
-        });
-        
-        markers.push({ marker: marker, workshop: workshop, infowindow: infowindow });
-        infowindows.push(infowindow);
-      });
+      } catch (err) {
+        log('에러:', err);
+        showStatus('error', 
+          '❌ 데이터를 불러올 수 없습니다',
+          `오류: ${err.message}<br><br>
+          <strong>확인사항:</strong><br>
+          1. 구글 시트 API URL이 올바른가요?<br>
+          2. Apps Script가 "모든 사용자"로 배포되었나요?<br>
+          3. 브라우저 콘솔(F12)에서 상세 오류를 확인하세요.`
+        );
+      }
     }
     
-    // ========================================
-    // 공방 리스트 렌더링
-    // ========================================
-    function renderWorkshopList() {
-      var container = document.getElementById('workshop-list-container');
-      var filtered = getFilteredWorkshops();
+    // =============================================
+    // 필터
+    // =============================================
+    function createFilters(regions, genres) {
+      const regionEl = document.getElementById('regionFilters');
+      const genreEl = document.getElementById('genreFilters');
       
-      container.innerHTML = filtered.map(function(workshop) {
-        var genresText = workshop.genres.map(function(g) {
-          var icons = { '압화': '🌸', '레진': '💎', '하바리움': '🌿', '부케기프트': '💐' };
-          return (icons[g] || '🎨') + ' ' + g;
-        }).join(' | ');
-        
-        return '<div class="workshop-item" data-id="' + workshop.id + '"><span class="workshop-badge">⭐ 공식 파트너</span><div class="workshop-name">' + workshop.name + '</div><div class="workshop-genres">' + genresText + '</div><div class="workshop-address">📍 ' + workshop.address + '</div><div class="workshop-contact"><button class="contact-btn" onclick="openInstagram(\'' + workshop.instagram + '\')">📷 인스타그램</button><button class="contact-btn" onclick="callPhone(\'' + workshop.phone + '\')">📞 전화하기</button></div></div>';
-      }).join('');
-      
-      document.getElementById('visible-count').textContent = filtered.length;
-      
-      // 클릭 이벤트 등록
-      var items = document.querySelectorAll('.workshop-item');
-      items.forEach(function(item) {
-        item.addEventListener('click', function(e) {
-          if (e.target.closest('.contact-btn')) return;
-          var id = parseInt(this.getAttribute('data-id'));
-          var workshop = workshopsData.find(function(w) { return w.id === id; });
-          if (workshop && map && workshop.lat && workshop.lng) {
-            var position = new naver.maps.LatLng(workshop.lat, workshop.lng);
-            map.panTo(position);
-            map.setZoom(14);
-            var markerData = markers.find(function(m) { return m.workshop.id === id; });
-            if (markerData) {
-              infowindows.forEach(function(iw) { iw.close(); });
-              markerData.infowindow.open(map, markerData.marker);
-            }
-            selectWorkshopItem(id);
-          }
-        });
+      regionEl.innerHTML = '<button class="filter-btn active" data-region="all">전체</button>';
+      regions.forEach(r => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn';
+        btn.dataset.region = r;
+        btn.textContent = r;
+        btn.onclick = () => filterByRegion(r);
+        regionEl.appendChild(btn);
       });
+      
+      genreEl.innerHTML = '<button class="filter-btn active" data-genre="all">전체</button>';
+      genres.forEach(g => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn';
+        btn.dataset.genre = g;
+        btn.textContent = g;
+        btn.onclick = () => filterByGenre(g);
+        genreEl.appendChild(btn);
+      });
+      
+      // 전체 버튼 이벤트
+      document.querySelector('[data-region="all"]').onclick = () => filterByRegion('all');
+      document.querySelector('[data-genre="all"]').onclick = () => filterByGenre('all');
     }
     
-    // ========================================
-    // 필터링
-    // ========================================
-    function getFilteredWorkshops() {
-      return workshopsData.filter(function(workshop) {
-        if (currentFilters.region !== 'all' && workshop.region !== currentFilters.region) return false;
-        if (currentFilters.genre !== 'all' && workshop.genres.indexOf(currentFilters.genre) === -1) return false;
+    function filterByRegion(region) {
+      currentFilters.region = region;
+      document.querySelectorAll('[data-region]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.region === region);
+      });
+      renderList();
+      updateMarkers();
+    }
+    
+    function filterByGenre(genre) {
+      currentFilters.genre = genre;
+      document.querySelectorAll('[data-genre]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.genre === genre);
+      });
+      renderList();
+      updateMarkers();
+    }
+    
+    function getFiltered() {
+      return workshopsData.filter(ws => {
+        if (currentFilters.region !== 'all' && ws.region !== currentFilters.region) return false;
+        if (currentFilters.genre !== 'all' && !ws.genres.includes(currentFilters.genre)) return false;
         return true;
       });
     }
     
-    function filterMarkers() {
-      if (!map) return;
+    // =============================================
+    // 리스트 렌더링
+    // =============================================
+    function renderList() {
+      const filtered = getFiltered();
+      const container = document.getElementById('workshopList');
       
-      var filtered = getFilteredWorkshops();
-      var filteredIds = filtered.map(function(w) { return w.id; });
+      container.innerHTML = filtered.map(ws => {
+        const genresText = ws.genres.map(g => {
+          const icons = { '압화': '🌸', '레진': '💎', '하바리움': '🌿', '부케기프트': '💐' };
+          return `${icons[g] || '🎨'} ${g}`;
+        }).join(' | ');
+        
+        return `
+          <div class="workshop-card" data-id="${ws.id}" onclick="selectWorkshop(${ws.id})">
+            <span class="badge">⭐ 공식 파트너</span>
+            <div class="name">${ws.name}</div>
+            <div class="genres">${genresText}</div>
+            <div class="address">📍 ${ws.address}</div>
+            <div class="contact">
+              <div class="contact-btn" onclick="event.stopPropagation(); window.open('https://instagram.com/${ws.instagram}', '_blank')">📷 인스타</div>
+              <div class="contact-btn" onclick="event.stopPropagation(); window.location.href='tel:${ws.phone}'">📞 전화</div>
+            </div>
+          </div>
+        `;
+      }).join('');
       
-      markers.forEach(function(item) {
-        if (filteredIds.indexOf(item.workshop.id) > -1) {
-          item.marker.setMap(map);
-        } else {
-          item.marker.setMap(null);
-          item.infowindow.close();
+      document.getElementById('count').textContent = filtered.length;
+    }
+    
+    function selectWorkshop(id) {
+      const ws = workshopsData.find(w => w.id === id);
+      if (!ws || !naverMap) return;
+      
+      document.querySelectorAll('.workshop-card').forEach(el => el.classList.remove('active'));
+      document.querySelector(`[data-id="${id}"]`)?.classList.add('active');
+      
+      if (ws.lat && ws.lng) {
+        const pos = new naver.maps.LatLng(ws.lat, ws.lng);
+        naverMap.setCenter(pos);
+        naverMap.setZoom(14);
+        
+        const marker = markers.find(m => m.id === id);
+        if (marker) {
+          naver.maps.Event.trigger(marker.marker, 'click');
         }
+      }
+    }
+    
+    // =============================================
+    // 지도
+    // =============================================
+    function initMap() {
+      try {
+        if (typeof naver === 'undefined' || !naver.maps) {
+          throw new Error('네이버 지도 API 로드 실패');
+        }
+        
+        naverMap = new naver.maps.Map('map', {
+          center: new naver.maps.LatLng(37.5665, 126.9780),
+          zoom: 11
+        });
+        
+        document.getElementById('mapLoading').style.display = 'none';
+        log('지도 초기화 완료');
+        
+        if (workshopsData.length > 0) {
+          createMarkers();
+        }
+      } catch (err) {
+        log('지도 초기화 실패:', err);
+        document.getElementById('mapLoading').innerHTML = '⚠️<br>지도 로드 실패<br><small>네이버 지도 API 키를 확인하세요</small>';
+      }
+    }
+    
+    function createMarkers() {
+      markers.forEach(m => m.marker.setMap(null));
+      markers = [];
+      
+      workshopsData.forEach(ws => {
+        if (!ws.lat || !ws.lng) return;
+        
+        const marker = new naver.maps.Marker({
+          position: new naver.maps.LatLng(ws.lat, ws.lng),
+          map: naverMap,
+          title: ws.name
+        });
+        
+        const infoWindow = new naver.maps.InfoWindow({
+          content: `
+            <div style="padding: 16px; min-width: 200px;">
+              <strong>${ws.name}</strong><br>
+              <small>${ws.genres.join(', ')}</small><br>
+              <small>📍 ${ws.address}</small>
+            </div>
+          `
+        });
+        
+        naver.maps.Event.addListener(marker, 'click', () => {
+          markers.forEach(m => m.infoWindow.close());
+          infoWindow.open(naverMap, marker);
+        });
+        
+        markers.push({ id: ws.id, marker, infoWindow });
+      });
+      
+      updateMarkers();
+    }
+    
+    function updateMarkers() {
+      const filtered = getFiltered();
+      const ids = filtered.map(w => w.id);
+      
+      markers.forEach(m => {
+        m.marker.setMap(ids.includes(m.id) ? naverMap : null);
       });
       
       if (filtered.length > 0 && markers.length > 0) {
-        var bounds = new naver.maps.LatLngBounds();
-        filtered.forEach(function(workshop) {
-          if (workshop.lat && workshop.lng) {
-            bounds.extend(new naver.maps.LatLng(workshop.lat, workshop.lng));
+        const bounds = new naver.maps.LatLngBounds();
+        filtered.forEach(ws => {
+          if (ws.lat && ws.lng) {
+            bounds.extend(new naver.maps.LatLng(ws.lat, ws.lng));
           }
         });
-        map.fitBounds(bounds);
+        naverMap.fitBounds(bounds);
       }
     }
     
-    function selectWorkshopItem(id) {
-      var items = document.querySelectorAll('.workshop-item');
-      items.forEach(function(item) { item.classList.remove('active'); });
-      var selectedItem = document.querySelector('[data-id="' + id + '"]');
-      if (selectedItem) {
-        selectedItem.classList.add('active');
-        selectedItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-    }
-    
-    // ========================================
-    // 필터 이벤트
-    // ========================================
-    function initFilters() {
-      var regionBtns = document.querySelectorAll('[data-region]');
-      regionBtns.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          regionBtns.forEach(function(b) { b.classList.remove('active'); });
-          this.classList.add('active');
-          currentFilters.region = this.getAttribute('data-region');
-          renderWorkshopList();
-          filterMarkers();
-        });
-      });
-      
-      var genreBtns = document.querySelectorAll('[data-genre]');
-      genreBtns.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          genreBtns.forEach(function(b) { b.classList.remove('active'); });
-          this.classList.add('active');
-          currentFilters.genre = this.getAttribute('data-genre');
-          renderWorkshopList();
-          filterMarkers();
-        });
-      });
-    }
-    
-    // ========================================
-    // 유틸리티 함수
-    // ========================================
-    function openInstagram(username) {
-      window.open('https://instagram.com/' + username, '_blank');
-    }
-    
-    function callPhone(number) {
-      window.location.href = 'tel:' + number;
-    }
-    
-    // ========================================
+    // =============================================
     // 초기화
-    // ========================================
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', function() {
-        initFilters();
-        
-        // 네이버 지도 API 확인 및 초기화
-        if (typeof naver !== 'undefined' && naver.maps) {
-          initMap();
-        } else {
-          document.getElementById('map-loading').innerHTML = '<div style="color: #C17B7B;"><div style="font-size: 48px; margin-bottom: 16px;">⚠️</div><div>네이버 지도 API 로딩 실패</div><div style="font-size:12px; margin-top:8px;">Client ID를 확인해주세요</div></div>';
-        }
-        
-        // 구글 시트에서 데이터 로드
-        loadWorkshopsData();
-      });
-    } else {
-      initFilters();
-      if (typeof naver !== 'undefined' && naver.maps) {
-        initMap();
-      }
-      loadWorkshopsData();
-    }
+    // =============================================
+    window.addEventListener('DOMContentLoaded', () => {
+      log('페이지 로드 완료');
+      initMap();
+      loadData();
+    });
   </script>
   
 </body>
 </html>
-
