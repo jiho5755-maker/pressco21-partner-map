@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>네이버 지도 API 테스트</title>
+  
+  <!-- 네이버 지도 API -->
+  <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=bfp8odep5r"></script>
+  
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+    
+    .status {
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    
+    .status.loading {
+      background: #e3f2fd;
+      color: #1976d2;
+    }
+    
+    .status.success {
+      background: #e8f5e9;
+      color: #388e3c;
+    }
+    
+    .status.error {
+      background: #ffebee;
+      color: #d32f2f;
+    }
+    
+    #map {
+      width: 100%;
+      height: 600px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+    }
+    
+    .info {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f5f5f5;
+      border-radius: 8px;
+    }
+    
+    .info h3 {
+      margin-top: 0;
+    }
+    
+    .info pre {
+      background: white;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  
+  <h1>🗺️ 네이버 지도 API 테스트</h1>
+  
+  <div id="status" class="status loading">
+    ⏳ 네이버 지도 API를 로드하는 중...
+  </div>
+  
+  <div id="map"></div>
+  
+  <div class="info">
+    <h3>📊 테스트 정보</h3>
+    <div id="info"></div>
+  </div>
+  
+  <script>
+    // 테스트 정보
+    var testInfo = {
+      clientId: 'bfp8odep5r',
+      domain: window.location.hostname,
+      protocol: window.location.protocol,
+      fullUrl: window.location.href,
+      naverApiLoaded: false,
+      naverMapsLoaded: false,
+      mapCreated: false
+    };
+    
+    // 정보 표시
+    function updateInfo() {
+      document.getElementById('info').innerHTML = '<pre>' + JSON.stringify(testInfo, null, 2) + '</pre>';
+    }
+    
+    // 상태 업데이트
+    function updateStatus(type, message) {
+      var statusEl = document.getElementById('status');
+      statusEl.className = 'status ' + type;
+      statusEl.innerHTML = message;
+    }
+    
+    // 테스트 시작
+    window.addEventListener('load', function() {
+      console.log('=== 네이버 지도 API 테스트 시작 ===');
+      
+      // 1. naver 객체 확인
+      if (typeof naver !== 'undefined') {
+        testInfo.naverApiLoaded = true;
+        console.log('✅ naver 객체 로드됨');
+      } else {
+        testInfo.naverApiLoaded = false;
+        console.error('❌ naver 객체 없음 - API 스크립트 로드 실패');
+        updateStatus('error', '❌ 네이버 지도 API 로드 실패<br>Client ID 또는 도메인 설정을 확인하세요.');
+        updateInfo();
+        return;
+      }
+      
+      // 2. naver.maps 확인
+      if (naver.maps) {
+        testInfo.naverMapsLoaded = true;
+        console.log('✅ naver.maps 로드됨');
+      } else {
+        testInfo.naverMapsLoaded = false;
+        console.error('❌ naver.maps 없음');
+        updateStatus('error', '❌ naver.maps 로드 실패');
+        updateInfo();
+        return;
+      }
+      
+      // 3. 지도 생성 시도
+      try {
+        var mapOptions = {
+          center: new naver.maps.LatLng(37.5665, 126.9780), // 서울시청
+          zoom: 12
+        };
+        
+        var map = new naver.maps.Map('map', mapOptions);
+        testInfo.mapCreated = true;
+        
+        console.log('✅ 지도 생성 성공!');
+        updateStatus('success', '✅ 네이버 지도 API 연동 성공!<br>지도가 정상적으로 표시됩니다.');
+        
+        // 테스트 마커 추가
+        var marker = new naver.maps.Marker({
+          position: new naver.maps.LatLng(37.5665, 126.9780),
+          map: map,
+          title: '테스트 마커'
+        });
+        
+        console.log('✅ 마커 추가 성공!');
+        
+      } catch (error) {
+        testInfo.mapCreated = false;
+        console.error('❌ 지도 생성 실패:', error);
+        updateStatus('error', '❌ 지도 생성 실패<br>' + error.message);
+      }
+      
+      updateInfo();
+    });
+  </script>
+  
+</body>
+</html>
+
