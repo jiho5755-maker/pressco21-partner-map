@@ -1,0 +1,1 @@
+# pressco21-partner-map
