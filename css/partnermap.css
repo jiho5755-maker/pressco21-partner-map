@@ -848,6 +848,46 @@
 }
 
 /* ========================================
+   Phosphor Icons 스타일
+   ======================================== */
+
+/* 아이콘 정렬 및 간격 통일 */
+#partnermap-container i.ph,
+#partnermap-container i.ph-fill {
+    vertical-align: middle;
+    margin-right: 4px;
+    display: inline-block;
+}
+
+/* 버튼 내 아이콘 */
+#partnermap-container button i.ph,
+#partnermap-container button i.ph-fill {
+    margin-right: 6px;
+}
+
+/* 카드 즐겨찾기 버튼 아이콘 (마진 제거) */
+#partnermap-container .pm-partner-card .pm-favorite-btn i {
+    margin-right: 0;
+}
+
+/* 거리 배지 아이콘 */
+#partnermap-container .pm-distance-badge i {
+    margin-right: 4px;
+}
+
+/* 모달 액션 버튼 아이콘 */
+#partnermap-container .pm-action-btn i {
+    font-size: 18px;
+    margin-right: 6px;
+}
+
+/* 네비게이션 버튼 아이콘 */
+#partnermap-container .pm-nav-btn i {
+    font-size: 16px;
+    margin-right: 6px;
+}
+
+/* ========================================
    애니메이션
    ======================================== */
 

@@ -189,7 +189,8 @@
         var self = this;
 
         var isFavorite = self.isFavorite(partner.id);
-        var favoriteIcon = isFavorite ? '❤️' : '🤍';
+        var favoriteIconClass = isFavorite ? 'ph-fill ph-heart' : 'ph ph-heart';
+        var favoriteIcon = '<i class="' + favoriteIconClass + '"></i>';
         var favoriteClass = isFavorite ? 'active' : '';
 
         var logoUrl = partner.logo || self.config.defaultLogoPath;
@@ -206,7 +207,7 @@
         // 거리 표시 (있는 경우)
         var distanceHtml = '';
         if (partner.distance !== undefined) {
-            distanceHtml = '<span class="pm-distance-badge">📏 ' + partner.distance.toFixed(1) + 'km</span>';
+            distanceHtml = '<span class="pm-distance-badge"><i class="ph ph-ruler"></i> ' + partner.distance.toFixed(1) + 'km</span>';
         }
 
         return '<div class="pm-partner-card" data-partner-id="' + partner.id + '">' +
@@ -225,8 +226,8 @@
                '<div class="pm-partner-info">' +
                '<h4>' + escapedName + '</h4>' +
                '<div class="pm-partner-categories">' + categoryTags + '</div>' +
-               '<p class="pm-partner-address">📍 ' + escapedAddress + '</p>' +
-               '<p class="pm-partner-phone">📞 ' + escapedPhone + '</p>' +
+               '<p class="pm-partner-address"><i class="ph ph-map-pin"></i> ' + escapedAddress + '</p>' +
+               '<p class="pm-partner-phone"><i class="ph ph-phone"></i> ' + escapedPhone + '</p>' +
                '</div>' +
                '</div>';
     };
@@ -247,7 +248,8 @@
         if (!modal || !modalBody) return;
 
         var isFavorite = self.isFavorite(partner.id);
-        var favoriteIcon = isFavorite ? '❤️' : '🤍';
+        var favoriteIconClass = isFavorite ? 'ph-fill ph-heart' : 'ph ph-heart';
+        var favoriteIcon = '<i class="' + favoriteIconClass + '"></i>';
         var favoriteText = isFavorite ? '즐겨찾기됨' : '즐겨찾기';
         var favoriteClass = isFavorite ? 'active' : '';
 
@@ -279,7 +281,7 @@
                    '</button>' +
                    '<button class="pm-action-btn pm-share-btn" ' +
                    'onclick="window.UIService.showShareModal(\'' + partner.id + '\')">' +
-                   '📤 공유하기' +
+                   '<i class="ph ph-share-network"></i> 공유하기' +
                    '</button>' +
                    '</div>' +
                    '<div class="pm-modal-section">' +
@@ -288,18 +290,18 @@
                    '</div>' +
                    '<div class="pm-modal-section">' +
                    '<h3>위치 정보</h3>' +
-                   '<p class="pm-address">📍 ' + escapedAddress + '</p>' +
+                   '<p class="pm-address"><i class="ph ph-map-pin"></i> ' + escapedAddress + '</p>' +
                    '<div class="pm-navigation-buttons">' +
                    '<a href="https://map.naver.com/v5/search/' + encodeURIComponent(partner.address) + '" ' +
-                   'target="_blank" class="pm-nav-btn pm-nav-naver">🗺️ 네이버 지도</a>' +
+                   'target="_blank" class="pm-nav-btn pm-nav-naver"><i class="ph ph-map-trifold"></i> 네이버 지도</a>' +
                    '<a href="https://map.kakao.com/?q=' + encodeURIComponent(partner.address) + '" ' +
-                   'target="_blank" class="pm-nav-btn pm-nav-kakao">🗺️ 카카오맵</a>' +
+                   'target="_blank" class="pm-nav-btn pm-nav-kakao"><i class="ph ph-map-trifold"></i> 카카오맵</a>' +
                    '</div>' +
                    '</div>' +
                    '<div class="pm-modal-section">' +
                    '<h3>연락처</h3>' +
-                   '<p>📞 <a href="tel:' + partner.phone + '">' + escapedPhone + '</a></p>' +
-                   (escapedEmail ? '<p>📧 <a href="mailto:' + partner.email + '">' + escapedEmail + '</a></p>' : '') +
+                   '<p><i class="ph ph-phone"></i> <a href="tel:' + partner.phone + '">' + escapedPhone + '</a></p>' +
+                   (escapedEmail ? '<p><i class="ph ph-envelope-simple"></i> <a href="mailto:' + partner.email + '">' + escapedEmail + '</a></p>' : '') +
                    '</div>';
 
         // 홈페이지, 인스타그램
@@ -308,12 +310,12 @@
                     '<h3>링크</h3>';
 
             if (partner.homepage) {
-                html += '<p>🌐 <a href="' + partner.homepage + '" target="_blank">홈페이지</a></p>';
+                html += '<p><i class="ph ph-globe"></i> <a href="' + partner.homepage + '" target="_blank">홈페이지</a></p>';
             }
 
             if (partner.instagram) {
                 var instagramUrl = partner.instagram.startsWith('http') ? partner.instagram : 'https://instagram.com/' + partner.instagram;
-                html += '<p>📷 <a href="' + instagramUrl + '" target="_blank">인스타그램</a></p>';
+                html += '<p><i class="ph ph-camera"></i> <a href="' + instagramUrl + '" target="_blank">인스타그램</a></p>';
             }
 
             html += '</div>';
@@ -420,10 +422,12 @@
 
             if (isFav) {
                 btn.classList.add('active');
-                btn.textContent = btn.textContent.includes('즐겨찾기됨') ? '❤️ 즐겨찾기됨' : '❤️';
+                var hasText = btn.textContent.includes('즐겨찾기됨');
+                btn.innerHTML = hasText ? '<i class="ph-fill ph-heart"></i> 즐겨찾기됨' : '<i class="ph-fill ph-heart"></i>';
             } else {
                 btn.classList.remove('active');
-                btn.textContent = btn.textContent.includes('즐겨찾기') ? '🤍 즐겨찾기' : '🤍';
+                var hasText = btn.textContent.includes('즐겨찾기');
+                btn.innerHTML = hasText ? '<i class="ph ph-heart"></i> 즐겨찾기' : '<i class="ph ph-heart"></i>';
             }
         });
     };

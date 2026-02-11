@@ -495,14 +495,15 @@
 
         var position = new naver.maps.LatLng(lat, lng);
 
-        // 📍 마커 생성
+        // 기준점 마커 생성
         self.referencePointMarker = new naver.maps.Marker({
             position: position,
             map: self.map,
             icon: {
                 content: '<div style="width:40px;height:40px;line-height:40px;' +
-                         'text-align:center;font-size:28px;' +
-                         'animation:pulse 1.5s infinite;">📍</div>',
+                         'text-align:center;font-size:28px;color:#C9A961;' +
+                         'animation:pulse 1.5s infinite;">' +
+                         '<i class="ph-fill ph-map-pin"></i></div>',
                 anchor: new naver.maps.Point(20, 40)
             },
             zIndex: 1000
