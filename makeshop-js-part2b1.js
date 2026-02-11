@@ -130,6 +130,41 @@
     // ========================================
 
     /**
+     * Skeleton Loading 표시
+     * @param {number} count - 스켈레톤 카드 개수 (기본값: 5)
+     */
+    UIService.prototype.showSkeletonList = function(count) {
+        count = count || 5;
+        var listContainer = document.getElementById('pm-partner-list');
+        if (!listContainer) return;
+
+        var skeletonHTML = '';
+        for (var i = 0; i < count; i++) {
+            skeletonHTML += '<div class="pm-skeleton-card">' +
+                '<div style="display: flex; gap: 16px;">' +
+                '<div class="pm-skeleton pm-skeleton-logo"></div>' +
+                '<div style="flex: 1;">' +
+                '<div class="pm-skeleton pm-skeleton-text-lg"></div>' +
+                '<div class="pm-skeleton pm-skeleton-text"></div>' +
+                '<div class="pm-skeleton pm-skeleton-text-sm"></div>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+        }
+
+        listContainer.innerHTML = skeletonHTML;
+    };
+
+    /**
+     * Skeleton Loading 숨김
+     */
+    UIService.prototype.hideSkeletonList = function() {
+        var listContainer = document.getElementById('pm-partner-list');
+        if (!listContainer) return;
+        listContainer.innerHTML = '';
+    };
+
+    /**
      * 파트너 리스트 렌더링
      * @param {Array} partners - 파트너 배열
      */

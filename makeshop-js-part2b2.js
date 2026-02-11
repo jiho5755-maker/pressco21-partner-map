@@ -60,6 +60,72 @@
         };
     };
 
+    /**
+     * Ripple 효과 생성 (Material Design)
+     * @param {Event} event - 클릭 이벤트
+     * @param {HTMLElement} element - Ripple을 추가할 요소
+     */
+    window.createRipple = function(event, element) {
+        // Ripple 컨테이너 클래스 추가
+        if (!element.classList.contains('pm-ripple-container')) {
+            element.classList.add('pm-ripple-container');
+        }
+
+        // Ripple 요소 생성
+        var ripple = document.createElement('span');
+        ripple.classList.add('pm-ripple');
+
+        // 클릭 위치 계산
+        var rect = element.getBoundingClientRect();
+        var x = event.clientX - rect.left;
+        var y = event.clientY - rect.top;
+
+        // Ripple 크기 계산 (요소의 대각선 길이)
+        var size = Math.max(rect.width, rect.height) * 2;
+
+        // Ripple 스타일 설정
+        ripple.style.width = size + 'px';
+        ripple.style.height = size + 'px';
+        ripple.style.left = (x - size / 2) + 'px';
+        ripple.style.top = (y - size / 2) + 'px';
+
+        // Ripple 추가
+        element.appendChild(ripple);
+
+        // 애니메이션 종료 후 제거
+        setTimeout(function() {
+            if (ripple.parentNode) {
+                ripple.parentNode.removeChild(ripple);
+            }
+        }, 600);
+    };
+
+    // ========================================
+    // Ripple 효과 초기화
+    // ========================================
+
+    /**
+     * Ripple 효과 초기화
+     * 모든 버튼에 Ripple 이벤트 리스너 추가
+     */
+    function setupRipple() {
+        var buttons = document.querySelectorAll(
+            '#partnermap-container button, ' +
+            '#partnermap-container .pm-action-btn, ' +
+            '#partnermap-container .pm-gps-btn, ' +
+            '#partnermap-container .pm-filter-tab, ' +
+            '#partnermap-container .pm-share-btn'
+        );
+
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function(e) {
+                window.createRipple(e, this);
+            });
+        });
+
+        console.log('[Ripple] Ripple 효과 초기화 완료 (' + buttons.length + '개 버튼)');
+    }
+
     // ========================================
     // GPS 기능
     // ========================================
@@ -178,6 +244,7 @@
             uiService = new window.UIServiceClass(CONFIG);
             window.UIService = uiService;  // 전역 인스턴스 등록
             uiService.showLoading();
+            uiService.showSkeletonList(5);  // 스켈레톤 로딩 표시
 
             // 2. API 클라이언트 초기화
             apiClient = new window.PartnerAPI(CONFIG);
@@ -217,7 +284,8 @@
                     // 9. 마커 생성
                     mapService.createMarkers(partners);
 
-                    // 10. 파트너 리스트 렌더링
+                    // 10. 스켈레톤 숨김 & 파트너 리스트 렌더링
+                    uiService.hideSkeletonList();
                     uiService.renderPartnerList(partners);
 
                     // 11. GPS 버튼 설정
@@ -226,13 +294,16 @@
                     // 12. 기준점 초기화 버튼 설정
                     setupClearReferenceButton();
 
-                    // 13. URL 파라미터 처리 (특정 파트너 직접 접근)
+                    // 13. Ripple 효과 초기화
+                    setupRipple();
+
+                    // 14. URL 파라미터 처리 (특정 파트너 직접 접근)
                     handleUrlParams(partners);
 
-                    // 14. 로딩 숨김
+                    // 15. 로딩 숨김
                     uiService.hideLoading();
 
-                    // 15. 성공 알림
+                    // 16. 성공 알림
                     uiService.showToast(partners.length + '개의 제휴 업체를 불러왔습니다.', 'success');
 
                     console.log('[Main] 초기화 완료');
