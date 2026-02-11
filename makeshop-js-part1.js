@@ -18,7 +18,7 @@ var CONFIG = {
     // ========================================
     // 테스트 데이터 설정
     // ========================================
-    useTestData: true,  // 개발 시 true, 운영 시 false로 변경
+    useTestData: false,  // 개발 시 true, 운영 시 false로 변경
     testDataPath: '/test-data/partners-200.json',
 
     // ========================================
@@ -963,15 +963,17 @@ if (typeof window !== 'undefined') {
 
         var position = new naver.maps.LatLng(lat, lng);
 
-        // 📍 마커 생성
+        // 기준점 마커 생성 (Phosphor Icon)
         self.referencePointMarker = new naver.maps.Marker({
             position: position,
             map: self.map,
             icon: {
-                content: '<div style="width:40px;height:40px;line-height:40px;' +
-                         'text-align:center;font-size:28px;' +
-                         'animation:pulse 1.5s infinite;">📍</div>',
-                anchor: new naver.maps.Point(20, 40)
+                content: '<div style="width:50px;height:50px;display:flex;align-items:center;justify-content:center;' +
+                         'background:#FF6B6B;border-radius:50%;box-shadow:0 4px 12px rgba(255,107,107,0.4);' +
+                         'animation:pulse 1.5s infinite;">' +
+                         '<i class="ph ph-map-pin" style="font-size:28px;color:white;"></i>' +
+                         '</div>',
+                anchor: new naver.maps.Point(25, 50)
             },
             zIndex: 1000
         });
