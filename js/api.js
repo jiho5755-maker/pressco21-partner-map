@@ -120,6 +120,27 @@
 
         console.log('[API] 파트너 데이터 로드 시작');
 
+        // 테스트 데이터 모드 (개발용)
+        if (self.config.useTestData) {
+            console.log('[API] 테스트 데이터 모드 활성화');
+            return fetch(self.config.testDataPath)
+                .then(function(response) {
+                    if (!response.ok) {
+                        throw new Error('테스트 데이터 로드 실패: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(function(rawPartners) {
+                    console.log('[API] 테스트 데이터 로드 완료:', rawPartners.length + '개');
+                    return self.processPartnerData(rawPartners);
+                })
+                .catch(function(error) {
+                    console.error('[API] 테스트 데이터 로드 오류:', error);
+                    return [];
+                });
+        }
+
+        // 운영 모드: Google Sheets API
         return fetch(self.config.googleSheetApiUrl)
             .then(function(response) {
                 if (!response.ok) {
@@ -142,48 +163,65 @@
 
                 console.log('[API] 파트너 수:', rawPartners.length);
 
-                // 데이터 가공 (v2 로직 재사용)
-                var partners = rawPartners
-                    .filter(function(p) {
-                        return p.lat && p.lng;
-                    })
-                    .map(function(p) {
-                        return {
-                            id: p.id,
-                            name: p.name,
-                            category: p.category ? p.category.split(',').map(function(c) {
-                                return c.trim();
-                            }) : [],
-                            address: p.address,
-                            lat: parseFloat(p.lat),
-                            lng: parseFloat(p.lng),
-                            phone: p.phone,
-                            email: p.email,
-                            description: p.description,
-                            imageUrl: p.imageUrl,
-                            logoUrl: p.logoUrl,
-                            association: p.association || '',
-                            partnerType: p.partnerType
-                                ? (typeof p.partnerType === 'string'
-                                    ? p.partnerType.split(',').map(function(t) {
-                                        return t.trim();
-                                    })
-                                    : p.partnerType)
-                                : []
-                        };
-                    });
-
-                console.log('[API] 가공 완료 (' + partners.length + '개 파트너)');
-
-                // 캐시 저장
-                self.setCache(partners);
-
-                return partners;
+                // 데이터 가공 위임
+                return self.processPartnerData(rawPartners);
             })
             .catch(function(error) {
                 console.error('[API] 데이터 로드 실패:', error);
                 return [];
             });
+    };
+
+    /**
+     * 파트너 데이터 가공 (공통 로직)
+     * @param {Array} rawPartners - 원본 파트너 데이터
+     * @returns {Array} 가공된 파트너 데이터
+     */
+    PartnerAPI.prototype.processPartnerData = function(rawPartners) {
+        var self = this;
+
+        if (!Array.isArray(rawPartners)) {
+            console.error('[API] 잘못된 데이터 형식:', rawPartners);
+            return [];
+        }
+
+        // 데이터 가공 (v2 로직 재사용)
+        var partners = rawPartners
+            .filter(function(p) {
+                return p.lat && p.lng;
+            })
+            .map(function(p) {
+                return {
+                    id: p.id,
+                    name: p.name,
+                    category: p.category ? p.category.split(',').map(function(c) {
+                        return c.trim();
+                    }) : [],
+                    address: p.address,
+                    latitude: parseFloat(p.lat),  // ⭐ CRITICAL: lat → latitude
+                    longitude: parseFloat(p.lng),  // ⭐ CRITICAL: lng → longitude
+                    phone: p.phone,
+                    email: p.email,
+                    description: p.description,
+                    imageUrl: p.imageUrl,
+                    logoUrl: p.logoUrl,
+                    association: p.association || '',
+                    partnerType: p.partnerType
+                        ? (typeof p.partnerType === 'string'
+                            ? p.partnerType.split(',').map(function(t) {
+                                return t.trim();
+                            })
+                            : p.partnerType)
+                        : []
+                };
+            });
+
+        console.log('[API] 가공 완료 (' + partners.length + '개 파트너)');
+
+        // 캐시 저장
+        self.setCache(partners);
+
+        return partners;
     };
 
     /**

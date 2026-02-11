@@ -127,6 +127,32 @@
         });
     }
 
+    /**
+     * 기준점 초기화 버튼 설정
+     */
+    function setupClearReferenceButton() {
+        var clearBtn = document.getElementById('pm-clear-reference-btn');
+        if (!clearBtn) return;
+
+        clearBtn.addEventListener('click', function() {
+            if (mapService) {
+                mapService.clearReferencePoint();
+            }
+
+            var sortSelect = document.getElementById('pm-sort-select');
+            if (sortSelect) {
+                sortSelect.value = 'name';
+            }
+
+            if (filterService) {
+                filterService.applyFilters();
+            }
+
+            clearBtn.style.display = 'none';
+            uiService.showToast('기준점이 초기화되었습니다.', 'info');
+        });
+    }
+
     // ========================================
     // 초기화
     // ========================================
@@ -192,13 +218,16 @@
             // 11. GPS 버튼 설정
             setupGPSButton();
 
-            // 12. URL 파라미터 처리 (특정 파트너 직접 접근)
+            // 12. 기준점 초기화 버튼 설정
+            setupClearReferenceButton();
+
+            // 13. URL 파라미터 처리 (특정 파트너 직접 접근)
             handleUrlParams(partners);
 
-            // 13. 로딩 숨김
+            // 14. 로딩 숨김
             uiService.hideLoading();
 
-            // 14. 성공 알림
+            // 15. 성공 알림
             uiService.showToast(partners.length + '개의 제휴 업체를 불러왔습니다.', 'success');
 
             console.log('[Main] 초기화 완료');

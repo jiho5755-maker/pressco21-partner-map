@@ -17,6 +17,7 @@
         this.markers = [];  // { partner, marker } 배열
         this.clusterMarkers = [];  // 클러스터 마커 배열
         this.referencePoint = null;  // 기준점 (GPS 등)
+        this.referencePointMarker = null;  // 기준점 마커 (지도 클릭 또는 GPS)
         this.isDragging = false;  // 드래그 상태 추적
     }
 
@@ -101,6 +102,36 @@
             setTimeout(function() {
                 self.isDragging = false;
             }, 100);
+        });
+
+        // 지도 클릭 이벤트 (기준점 설정)
+        naver.maps.Event.addListener(self.map, 'click', function(e) {
+            if (self.isDragging) return;
+
+            if (e && e.coord) {
+                var lat = e.coord._lat || e.coord.y;
+                var lng = e.coord._lng || e.coord.x;
+
+                if (lat && lng) {
+                    self.setReferencePointWithMarker(lat, lng);
+
+                    // FilterService에 기준점 전달
+                    if (window.FilterService) {
+                        window.FilterService.setReferencePoint(lat, lng);
+
+                        // 거리순 정렬로 자동 변경
+                        var sortSelect = document.getElementById('pm-sort-select');
+                        if (sortSelect) {
+                            sortSelect.value = 'distance';
+                            window.FilterService.applyFilters();
+                        }
+                    }
+
+                    if (window.UIService) {
+                        window.UIService.showToast('기준점이 설정되었습니다.', 'success');
+                    }
+                }
+            }
         });
 
         // 줌/idle 이벤트 (마커 가시성 업데이트)
@@ -447,6 +478,65 @@
         var position = new naver.maps.LatLng(lat, lng);
         self.map.setCenter(position);
         self.map.setZoom(self.config.gpsZoomLevel);
+    };
+
+    /**
+     * 기준점 설정 및 마커 표시 (지도 클릭용)
+     * @param {number} lat - 위도
+     * @param {number} lng - 경도
+     */
+    MapService.prototype.setReferencePointWithMarker = function(lat, lng) {
+        var self = this;
+
+        // 기존 마커 제거
+        if (self.referencePointMarker) {
+            self.referencePointMarker.setMap(null);
+        }
+
+        self.referencePoint = { lat: lat, lng: lng };
+
+        if (!self.map) return;
+
+        var position = new naver.maps.LatLng(lat, lng);
+
+        // 📍 마커 생성
+        self.referencePointMarker = new naver.maps.Marker({
+            position: position,
+            map: self.map,
+            icon: {
+                content: '<div style="width:40px;height:40px;line-height:40px;' +
+                         'text-align:center;font-size:28px;' +
+                         'animation:pulse 1.5s infinite;">📍</div>',
+                anchor: new naver.maps.Point(20, 40)
+            },
+            zIndex: 1000
+        });
+
+        self.map.setCenter(position);
+
+        // 초기화 버튼 표시
+        var clearBtn = document.getElementById('pm-clear-reference-btn');
+        if (clearBtn) {
+            clearBtn.style.display = 'block';
+        }
+    };
+
+    /**
+     * 기준점 및 마커 초기화
+     */
+    MapService.prototype.clearReferencePoint = function() {
+        var self = this;
+
+        if (self.referencePointMarker) {
+            self.referencePointMarker.setMap(null);
+            self.referencePointMarker = null;
+        }
+
+        self.referencePoint = null;
+
+        if (window.FilterService) {
+            window.FilterService.setReferencePoint(null, null);
+        }
     };
 
     /**

@@ -16,6 +16,12 @@ var CONFIG = {
     googleSheetApiUrl: 'https://script.google.com/macros/s/AKfycbxfp4SbpsUCmQu0gnF02r8oMY0dzzadElkcTcFNSsxPNo3x4zsNcw-z8MvJ3F7xskP6Yw/exec',
 
     // ========================================
+    // 테스트 데이터 설정
+    // ========================================
+    useTestData: true,  // 개발 시 true, 운영 시 false로 변경
+    testDataPath: '/test-data/partners-200.json',
+
+    // ========================================
     // 캐싱 설정
     // ========================================
     cacheKey: 'fresco21_partners_v3',

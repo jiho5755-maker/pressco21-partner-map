@@ -360,21 +360,28 @@
 
             case 'distance':
                 if (self.referencePoint) {
-                    self.filteredPartners.sort(function(a, b) {
-                        var distA = self.calculateDistance(
+                    // 거리 계산 및 파트너 객체에 추가
+                    self.filteredPartners.forEach(function(partner) {
+                        partner.distance = self.calculateDistance(
                             self.referencePoint.lat,
                             self.referencePoint.lng,
-                            a.latitude,
-                            a.longitude
+                            partner.latitude,
+                            partner.longitude
                         );
-                        var distB = self.calculateDistance(
-                            self.referencePoint.lat,
-                            self.referencePoint.lng,
-                            b.latitude,
-                            b.longitude
-                        );
-                        return distA - distB;
                     });
+
+                    // 정렬
+                    self.filteredPartners.sort(function(a, b) {
+                        return a.distance - b.distance;
+                    });
+                } else {
+                    // 기준점이 없으면 안내 메시지
+                    if (window.UIService) {
+                        window.UIService.showToast(
+                            '지도를 클릭하거나 GPS 버튼을 눌러 기준점을 설정하세요.',
+                            'info'
+                        );
+                    }
                 }
                 break;
 
