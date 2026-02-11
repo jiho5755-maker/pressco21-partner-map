@@ -240,14 +240,12 @@
                 uiService.showToast('지도를 불러오는 중 오류가 발생했습니다.', 'error');
             }
 
-            // 오류 메시지 표시
-            var container = document.getElementById('partnermap-container');
-            if (container) {
-                var errorDiv = document.createElement('div');
-                errorDiv.style.cssText = 'padding: 40px; text-align: center; color: #F44336;';
+            // 오류 메시지 표시 - createElement 대신 미리 만들어진 요소 사용
+            var errorDiv = document.getElementById('pm-error-message');
+            if (errorDiv) {
+                errorDiv.style.cssText = 'display: block; padding: 40px; text-align: center; color: #F44336;';
                 errorDiv.innerHTML = '<h2>오류 발생</h2><p>' + CONFIG.errorMessages.apiError + '</p>' +
                                      '<p style="font-size: 14px; color: #808080;">자세한 내용은 콘솔을 확인해주세요.</p>';
-                container.appendChild(errorDiv);
             }
         }
     }

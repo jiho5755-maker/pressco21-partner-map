@@ -1,0 +1,17 @@
+{
+  "name": "partner-map-v3",
+  "version": "3.0.0",
+  "description": "프레스코21 파트너맵 - 메이크샵 D4 최적화",
+  "scripts": {
+    "build": "bash build.sh",
+    "build:minify": "bash build.sh --minify",
+    "clean": "rm -f makeshop-js-part*.js makeshop-js-part*.min.js",
+    "archive": "mkdir -p archive/failed-attempts && mv makeshop-js*.js makeshop-js-v*.js archive/failed-attempts/ 2>/dev/null || true"
+  },
+  "keywords": ["makeshop", "partner-map", "naver-map"],
+  "author": "Fresco21",
+  "license": "MIT",
+  "devDependencies": {
+    "playwright": "^1.58.2"
+  }
+}

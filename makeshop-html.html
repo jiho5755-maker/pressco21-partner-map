@@ -5,6 +5,9 @@
 <!-- Fuse.js (검색 라이브러리) -->
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
 
+<!-- 네이버 지도 SDK (동적 로딩 대신 직접 로드) -->
+<script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=bfp8odep5r"></script>
+
 <!-- 메인 컨테이너 -->
 <div id="partnermap-container">
 
@@ -167,8 +170,13 @@
         </div>
     </div>
 
-    <!-- 토스트 알림 -->
+    <!-- 토스트 알림 컨테이너 -->
     <div id="pm-toast-container" class="pm-toast-container"></div>
+
+    <!-- 재사용 가능한 숨김 요소들 (createElement 제거용) -->
+    <div id="pm-toast" class="pm-toast" style="display: none;"></div>
+    <textarea id="pm-clipboard-helper" style="position: absolute; left: -9999px; opacity: 0;"></textarea>
+    <div id="pm-error-message" class="pm-error-message" style="display: none;"></div>
 
 </div>
 <!-- /partnermap-container -->

@@ -1,6 +1,85 @@
-# 파트너맵 v3 - 메이크샵 최적화 버전
+# 파트너맵 v3 - 메이크샵 D4 플랫폼
 
-프레스코21 제휴 업체 지도 서비스 - 메이크샵 D4 플랫폼 완벽 호환
+프레스코21 전국 제휴 업체 지도 - 3-Part 분할 빌드 방식
+
+## 🎯 메이크샵 저장 방법 (중요!)
+
+### 파일 분할 방식
+
+메이크샵 D4는 **단일 파일 크기 제한**(약 30-40KB)이 있습니다.
+따라서 3개 파일로 분할하여 저장해야 합니다.
+
+### 1단계: HTML 탭
+
+```
+메이크샵 관리자 > 쇼핑몰 디자인 > 페이지 디자인 편집 > HTML 탭
+```
+
+**파일**: `makeshop-html.html`
+**방법**: 전체 내용 복사 → 붙여넣기 → 저장
+
+### 2단계: JS 탭
+
+```
+메이크샵 관리자 > 쇼핑몰 디자인 > 페이지 디자인 편집 > JS 탭
+```
+
+**중요**: 3개 파일을 **순서대로** 붙여넣기!
+
+```
+1. makeshop-js-part1.js 전체 복사-붙여넣기
+   ↓ Part 1 바로 아래에 이어서
+2. makeshop-js-part2a.js 전체 복사-붙여넣기
+   ↓ Part 2A 바로 아래에 이어서
+3. makeshop-js-part2b.js 전체 복사-붙여넣기
+   → 저장 버튼 클릭
+```
+
+### 파일 구조
+
+```
+Part 1  (Config + API + Map)     - 기본 설정 및 지도
+Part 2A (Filters + Search)       - 필터 및 검색
+Part 2B (UI + Main)              - UI 및 초기화
+```
+
+상세한 저장 가이드는 [MAKESHOP.md](./MAKESHOP.md)를 참조하세요.
+
+---
+
+## 🔨 개발 및 빌드
+
+### 빌드 명령어
+
+```bash
+# 기본 빌드 (원본 버전)
+npm run build
+
+# 압축 빌드 (주석 제거)
+npm run build:minify
+
+# 빌드 파일 삭제
+npm run clean
+
+# 실패한 파일 아카이브로 이동
+npm run archive
+```
+
+### 파일 수정 후 재빌드
+
+```bash
+# 1. js/ 폴더의 원본 파일 수정
+vim js/ui.js
+
+# 2. 빌드
+npm run build
+
+# 3. 메이크샵에 다시 저장
+# - JS 탭 내용 전체 삭제
+# - Part 1, 2A, 2B 순서대로 붙여넣기
+```
+
+---
 
 ## 📋 프로젝트 개요
 
@@ -48,78 +127,53 @@ localStorage 캐시 (24시간)
 ## 📁 파일 구조
 
 ```
-/Users/jangjiho/workspace/partner-map/
-├── index.html              # 메인 페이지
-├── css/
-│   ├── variables.css       # CSS 변수
-│   └── partnermap.css      # 메인 스타일
-├── js/
+partner-map/
+├── js/                      # 원본 소스 (편집용)
 │   ├── config.js           # 설정
-│   ├── api.js              # 메이크샵 API 래퍼
-│   ├── map.js              # 네이버 지도
-│   ├── filters.js          # 필터링 시스템
-│   ├── search.js           # 검색 시스템
-│   ├── ui.js               # UI 컴포넌트
+│   ├── api.js              # API 클라이언트
+│   ├── map.js              # 지도 서비스
+│   ├── filters.js          # 필터 서비스
+│   ├── search.js           # 검색 서비스
+│   ├── ui.js               # UI 서비스
 │   └── main.js             # 초기화
+│
+├── makeshop-html.html       # 메이크샵 HTML 탭용
+├── makeshop-js-part1.js     # Part 1 (메이크샵 JS 탭용)
+├── makeshop-js-part2a.js    # Part 2A
+├── makeshop-js-part2b.js    # Part 2B
+│
+├── build.sh                 # 빌드 스크립트
+├── package.json             # npm 설정
+├── README.md                # 이 문서
+├── MAKESHOP.md              # 메이크샵 저장 가이드
+│
+├── archive/                 # 실패한 버전 보관
+│   └── failed-attempts/
+│
+├── css/
+│   ├── variables.css
+│   └── partnermap.css
 ├── images/
-│   └── default-logo.jpg    # 기본 로고
-├── docs/
-│   └── architecture.md     # 아키텍처 문서
-└── README.md
+│   └── default-logo.jpg
+└── docs/
+    └── architecture.md
 ```
 
-## 🚀 설치 및 설정
+## 🚨 주의사항
 
-### 1. 파일 업로드
-모든 파일을 웹서버 또는 메이크샵 파일 관리자에 업로드합니다.
+### 메이크샵 D4 제약사항
 
-### 2. 설정 파일 확인
-`js/config.js` 파일을 열어 다음 설정을 확인합니다:
+1. **파일 크기**: 단일 파일 30-40KB 제한
+2. **템플릿 리터럴**: `\${변수}` 사용 시 `\\\${변수}`로 이스케이프 필수
+3. **가상 태그**: `{$치환코드}` 절대 삭제 금지
+4. **빌드 도구**: npm/webpack 사용 불가, Vanilla JS만 사용
 
-```javascript
-// 네이버 지도 API (이미 설정됨)
-naverMapNcpKeyId: 'bfp8odep5r',
+### 코드 수정 시 주의
 
-// Google Sheets API (v2와 동일 - 이미 설정됨)
-googleSheetApiUrl: 'https://script.google.com/macros/s/AKfycbx.../exec',
-```
-
-**참고**: 기본 설정이 이미 되어 있으므로 별도 수정 불필요합니다.
-
-### 3. 메이크샵 HTML 편집에 삽입
-
-1. 관리자 > [디자인 설정] > [HTML 편집]
-2. "파트너맵" 전용 페이지 생성
-3. `<head>`에 CSS 링크 추가:
-
-```html
-<link rel="stylesheet" href="/css/variables.css">
-<link rel="stylesheet" href="/css/partnermap.css">
-```
-
-4. `<body>`에 HTML 구조 복사 (`index.html`의 `#partnermap-container` 내용)
-5. `</body>` 직전에 JS 스크립트 추가:
-
-```html
-<!-- Fuse.js -->
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
-
-<!-- 파트너맵 스크립트 -->
-<script src="/js/config.js"></script>
-<script src="/js/api.js"></script>
-<script src="/js/map.js"></script>
-<script src="/js/filters.js"></script>
-<script src="/js/search.js"></script>
-<script src="/js/ui.js"></script>
-<script src="/js/main.js"></script>
-```
-
-### 4. 저장 및 테스트
-- 저장 전 체크리스트:
-  - [ ] 템플릿 리터럴 이스케이프 확인
-  - [ ] 가상 태그 보존 확인
-  - [ ] CSS 스코핑 확인
-- 저장 → 미리보기 → 실서버 반영
+- `js/` 폴더의 원본 파일만 수정
+- `makeshop-js-part*.js`는 빌드로 자동 생성됨
+- 수정 후 반드시 `npm run build` 실행
+- 의존성 순서 유지: config → api → map → filters → search → ui → main
 
 ## 🔧 Google Sheets 데이터 업데이트
 
@@ -190,29 +244,68 @@ grep -rn '\${[^\\]' js/*.js
 
 결과가 없으면 모든 템플릿 리터럴이 올바르게 이스케이프 처리됨.
 
-## 🐛 문제 해결
+## 🧪 테스트
 
-### 메이크샵 에디터 저장 실패
-- **원인**: 템플릿 리터럴 `${variable}`이 메이크샵 치환코드로 오인됨
-- **해결**: 모든 `${}` 앞에 백슬래시 추가 → `\${}`
+### 브라우저 콘솔 테스트
 
-### 지도가 표시되지 않음
-- **원인**: 네이버 지도 API 키 미설정 또는 SDK 로드 실패
-- **해결**:
-  1. `config.js`에서 `naverMapNcpKeyId` 확인
-  2. 브라우저 콘솔에서 네이버 지도 SDK 로드 오류 확인
-  3. 네트워크 연결 확인
+```javascript
+// 1. 앱 초기화 확인
+console.log(window.PartnerMapApp);
 
-### 데이터가 로드되지 않음
-- **원인**: Google Sheets API URL 오류 또는 네트워크 차단
-- **해결**:
-  1. 브라우저 콘솔에서 `[API]` 로그 확인
-  2. Google Sheets API URL이 공개 배포 상태인지 확인
-  3. 캐시 삭제 후 재시도: `localStorage.removeItem('fresco21_partners_v3')`
+// 2. 네이버 지도 SDK 확인
+console.log(window.naver && window.naver.maps);
 
-### CSS 충돌
-- **원인**: 기존 쇼핑몰 스타일과 충돌
-- **해결**: 모든 CSS 선택자가 `#partnermap-container` 하위인지 확인
+// 3. 마커 수 확인
+console.log(window.PartnerMapApp.mapService().markers.length);
+```
+
+### 기능 체크리스트
+
+- [ ] 지도 표시
+- [ ] 마커 표시
+- [ ] 검색 기능
+- [ ] 필터 기능 (카테고리, 지역, 협회, 파트너 유형)
+- [ ] GPS 위치 기능
+- [ ] 파트너 상세 모달
+- [ ] 즐겨찾기
+- [ ] 공유 기능
+
+---
+
+## 📚 문제 해결
+
+### Q: "데이터 수정 실패" 오류
+
+**원인**: 파일 크기 초과 또는 잘못된 순서
+**해결**:
+1. Part 1, 2A, 2B를 정확한 순서로 붙여넣었는지 확인
+2. 각 파일 전체 내용이 복사되었는지 확인
+3. 빌드를 다시 실행해서 최신 파일인지 확인
+
+### Q: 지도가 표시되지 않음
+
+**원인**: HTML 탭에 네이버 SDK 누락
+**해결**: HTML 탭에 다음 코드 포함 확인
+```html
+<script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=bfp8odep5r"></script>
+```
+
+### Q: 빌드 후 파일이 생성되지 않음
+
+**원인**: js/ 폴더의 원본 파일 누락
+**해결**:
+```bash
+ls js/
+# config.js, api.js, map.js, filters.js, search.js, ui.js, main.js 확인
+```
+
+### Q: 데이터가 로드되지 않음
+
+**원인**: Google Sheets API URL 오류 또는 네트워크 차단
+**해결**:
+1. 브라우저 콘솔에서 `[API]` 로그 확인
+2. Google Sheets API URL이 공개 배포 상태인지 확인
+3. 캐시 삭제 후 재시도: `localStorage.removeItem('fresco21_partners_v3')`
 
 ## 📈 성능 최적화
 
@@ -243,8 +336,27 @@ grep -rn '\${[^\\]' js/*.js
 
 버그 리포트 및 기능 제안은 프로젝트 관리자에게 문의해주세요.
 
+## 📝 변경 이력
+
+### v3.0.0 (2026-02-11)
+- ✅ 메이크샵 D4 3-Part 분할 방식 적용
+- ✅ createElement 제거 (insertAdjacentHTML 사용)
+- ✅ 네이버 지도 SDK HTML 직접 로드
+- ✅ 빌드 스크립트 작성
+- ✅ 파일 크기 제한 문제 해결 (30-40KB 단위 분할)
+
+### 핵심 발견
+
+- ❌ 문제: 57KB 단일 파일 저장 실패
+- ✅ 해결: 3개 분할 파일 (Part1 + Part2A + Part2B) 저장 성공
+- 🔍 원인: 메이크샵의 **단일 파일 크기 제한** (약 30-40KB 추정)
+- 💡 놀라운 점: 압축 안 한 원본 버전(90KB 합계)도 분할하면 저장됨!
+
+### v2.0.0
+- Google Sheets 기반 아키텍처
+
+---
+
 ## 📞 문의
 
-- 개발: Claude Code
-- 날짜: 2026-02-11
-- 버전: 3.0
+문제가 발생하면 이슈를 등록해주세요.
