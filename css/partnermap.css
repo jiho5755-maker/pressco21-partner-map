@@ -20,6 +20,29 @@
 }
 
 /* ========================================
+   접근성 - Focus Visible
+   ======================================== */
+
+/* 키보드 포커스 스타일 (마우스 클릭 시 제외) */
+#partnermap-container button:focus-visible,
+#partnermap-container input:focus-visible,
+#partnermap-container select:focus-visible,
+#partnermap-container a:focus-visible,
+#partnermap-container [tabindex]:focus-visible {
+    outline: 3px solid var(--pm-primary);
+    outline-offset: 2px;
+    border-radius: var(--pm-radius-sm);
+}
+
+/* 마우스 클릭 시 포커스 아웃라인 제거 */
+#partnermap-container button:focus:not(:focus-visible),
+#partnermap-container input:focus:not(:focus-visible),
+#partnermap-container select:focus:not(:focus-visible),
+#partnermap-container a:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ========================================
    로딩 오버레이
    ======================================== */
 

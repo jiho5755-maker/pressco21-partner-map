@@ -167,8 +167,12 @@
                 var filterType = this.getAttribute('data-filter-type');
 
                 // 탭 활성화
-                tabs.forEach(function(t) { t.classList.remove('active'); });
+                tabs.forEach(function(t) {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                });
                 this.classList.add('active');
+                this.setAttribute('aria-selected', 'true');
 
                 // 필터 그룹 표시
                 var groups = document.querySelectorAll('.pm-filter-group');

@@ -210,11 +210,12 @@
             distanceHtml = '<span class="pm-distance-badge"><i class="ph ph-ruler"></i> ' + partner.distance.toFixed(1) + 'km</span>';
         }
 
-        return '<div class="pm-partner-card" data-partner-id="' + partner.id + '">' +
+        return '<div class="pm-partner-card" data-partner-id="' + partner.id + '" role="article" aria-label="' + escapedName + ' 업체 정보">' +
                '<button class="pm-favorite-btn ' + favoriteClass + '" ' +
                'data-partner-id="' + partner.id + '" ' +
                'onclick="window.UIService.toggleFavorite(\'' + partner.id + '\', event)" ' +
-               'title="즐겨찾기">' +
+               'title="즐겨찾기" ' +
+               'aria-label="' + escapedName + ' ' + (isFavorite ? '즐겨찾기 제거' : '즐겨찾기 추가') + '">' +
                favoriteIcon +
                '</button>' +
                (distanceHtml ? '<div class="pm-distance-indicator">' + distanceHtml + '</div>' : '') +
@@ -276,11 +277,13 @@
                    '<div class="pm-modal-actions">' +
                    '<button class="pm-action-btn pm-favorite-btn ' + favoriteClass + '" ' +
                    'onclick="window.UIService.toggleFavorite(\'' + partner.id + '\')" ' +
-                   'data-partner-id="' + partner.id + '">' +
+                   'data-partner-id="' + partner.id + '" ' +
+                   'aria-label="' + favoriteText + '">' +
                    favoriteIcon + ' ' + favoriteText +
                    '</button>' +
                    '<button class="pm-action-btn pm-share-btn" ' +
-                   'onclick="window.UIService.showShareModal(\'' + partner.id + '\')">' +
+                   'onclick="window.UIService.showShareModal(\'' + partner.id + '\')" ' +
+                   'aria-label="' + escapedName + ' 공유하기">' +
                    '<i class="ph ph-share-network"></i> 공유하기' +
                    '</button>' +
                    '</div>' +
@@ -293,9 +296,15 @@
                    '<p class="pm-address"><i class="ph ph-map-pin"></i> ' + escapedAddress + '</p>' +
                    '<div class="pm-navigation-buttons">' +
                    '<a href="https://map.naver.com/v5/search/' + encodeURIComponent(partner.address) + '" ' +
-                   'target="_blank" class="pm-nav-btn pm-nav-naver"><i class="ph ph-map-trifold"></i> 네이버 지도</a>' +
+                   'target="_blank" rel="noopener noreferrer" ' +
+                   'class="pm-nav-btn pm-nav-naver" ' +
+                   'aria-label="네이버 지도에서 ' + escapedName + ' 위치 보기">' +
+                   '<i class="ph ph-map-trifold"></i> 네이버 지도</a>' +
                    '<a href="https://map.kakao.com/?q=' + encodeURIComponent(partner.address) + '" ' +
-                   'target="_blank" class="pm-nav-btn pm-nav-kakao"><i class="ph ph-map-trifold"></i> 카카오맵</a>' +
+                   'target="_blank" rel="noopener noreferrer" ' +
+                   'class="pm-nav-btn pm-nav-kakao" ' +
+                   'aria-label="카카오맵에서 ' + escapedName + ' 위치 보기">' +
+                   '<i class="ph ph-map-trifold"></i> 카카오맵</a>' +
                    '</div>' +
                    '</div>' +
                    '<div class="pm-modal-section">' +
