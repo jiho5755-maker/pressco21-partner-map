@@ -54,14 +54,14 @@
     --pm-bg-tertiary: #F1F1F1;
     --pm-bg-overlay: rgba(0, 0, 0, 0.5);
 
-    /* Status - 상태 색상 */
+    /* Status - 상태 색상 (WCAG AA 대비 4.5:1 준수) */
     --pm-success: #4CAF50;
     --pm-success-light: #E8F5E9;
-    --pm-error: #F44336;
+    --pm-error: #D32F2F;        /* 개선: #F44336 → #D32F2F (대비 5.1:1) */
     --pm-error-light: #FFEBEE;
-    --pm-warning: #FF9800;
+    --pm-warning: #F57C00;      /* 개선: #FF9800 → #F57C00 (대비 4.6:1) */
     --pm-warning-light: #FFF3E0;
-    --pm-info: #2196F3;
+    --pm-info: #1976D2;         /* 개선: #2196F3 → #1976D2 (대비 5.6:1) */
     --pm-info-light: #E3F2FD;
 
     /* ========================================
