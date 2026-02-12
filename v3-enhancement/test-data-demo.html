@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>파트너맵 v3 - 테스트 데이터 데모</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+
+        h1 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .category-item {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+        }
+
+        .category-name {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .category-count {
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .partner-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .partner-item {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .partner-item:last-child {
+            border-bottom: none;
+        }
+
+        .partner-item:hover {
+            background: #f7fafc;
+        }
+
+        .partner-name {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .partner-address {
+            font-size: 14px;
+            color: #718096;
+        }
+
+        .partner-category {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+
+        .error {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>파트너맵 v3 - 테스트 데이터 데모</h1>
+        <p class="subtitle">Google Sheets에서 100개의 테스트 파트너 데이터를 불러옵니다.</p>
+
+        <div class="buttons">
+            <button class="btn-primary" onclick="loadData()">데이터 로드</button>
+            <button class="btn-secondary" onclick="loadFromJSON()">JSON 파일에서 로드</button>
+        </div>
+
+        <div id="error" class="error" style="display: none;"></div>
+
+        <div id="content" style="display: none;">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalCount">0</div>
+                    <div class="stat-label">총 파트너</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="categoryCount">0</div>
+                    <div class="stat-label">카테고리</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="regionCount">0</div>
+                    <div class="stat-label">지역</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">카테고리별 분포</div>
+                <div id="categories" class="category-grid"></div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">지역별 분포</div>
+                <div id="regions" class="category-grid"></div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">파트너 목록 (처음 20개)</div>
+                <div id="partners" class="partner-list"></div>
+            </div>
+        </div>
+
+        <div id="loading" class="loading">
+            데이터를 로드하려면 위의 버튼을 클릭하세요.
+        </div>
+    </div>
+
+    <script>
+        let partnersData = [];
+
+        // Google Sheets API에서 데이터 로드
+        function loadData() {
+            const apiUrl = prompt('Google Sheets API URL을 입력하세요:', 'https://script.google.com/macros/s/.../exec');
+
+            if (!apiUrl) return;
+
+            document.getElementById('loading').textContent = '데이터 로드 중...';
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('content').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        partnersData = data.partners;
+                        renderData();
+                    } else {
+                        showError('API 오류: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    showError('데이터 로드 실패: ' + error.message);
+                });
+        }
+
+        // JSON 파일에서 데이터 로드
+        function loadFromJSON() {
+            document.getElementById('loading').textContent = '데이터 로드 중...';
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('content').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+
+            fetch('./test-partners-api-response.json')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        partnersData = data.partners;
+                        renderData();
+                    } else {
+                        showError('JSON 파일 오류: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    showError('JSON 파일 로드 실패: ' + error.message);
+                });
+        }
+
+        // 데이터 렌더링
+        function renderData() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+
+            // 통계
+            document.getElementById('totalCount').textContent = partnersData.length;
+
+            // 카테고리별 통계
+            const categoryStats = {};
+            partnersData.forEach(p => {
+                categoryStats[p.category] = (categoryStats[p.category] || 0) + 1;
+            });
+            document.getElementById('categoryCount').textContent = Object.keys(categoryStats).length;
+
+            // 지역별 통계
+            const regionStats = {};
+            partnersData.forEach(p => {
+                const match = p.address.match(/서울특별시 (\S+구)/);
+                if (match) {
+                    regionStats[match[1]] = (regionStats[match[1]] || 0) + 1;
+                }
+            });
+            document.getElementById('regionCount').textContent = Object.keys(regionStats).length;
+
+            // 카테고리 렌더링
+            const categoriesHTML = Object.entries(categoryStats)
+                .sort((a, b) => b[1] - a[1])
+                .map(([cat, count]) => `
+                    <div class="category-item">
+                        <div class="category-name">\${cat}</div>
+                        <div class="category-count">\${count}개</div>
+                    </div>
+                `).join('');
+            document.getElementById('categories').innerHTML = categoriesHTML;
+
+            // 지역 렌더링
+            const regionsHTML = Object.entries(regionStats)
+                .sort((a, b) => b[1] - a[1])
+                .map(([region, count]) => `
+                    <div class="category-item">
+                        <div class="category-name">\${region}</div>
+                        <div class="category-count">\${count}개</div>
+                    </div>
+                `).join('');
+            document.getElementById('regions').innerHTML = regionsHTML;
+
+            // 파트너 목록 (처음 20개)
+            const partnersHTML = partnersData.slice(0, 20).map(p => `
+                <div class="partner-item">
+                    <div>
+                        <div class="partner-name">\${p.name}</div>
+                        <div class="partner-address">\${p.address}</div>
+                    </div>
+                    <div class="partner-category">\${p.category}</div>
+                </div>
+            `).join('');
+            document.getElementById('partners').innerHTML = partnersHTML;
+        }
+
+        // 에러 표시
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').textContent = message;
+            document.getElementById('error').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

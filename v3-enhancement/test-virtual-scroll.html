@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>파트너맵 v3 - Virtual Scroll 테스트</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .test-header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .test-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .test-btn {
+            padding: 10px 20px;
+            background: #7d9675;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .test-btn:hover {
+            background: #6b8463;
+        }
+
+        .test-btn.secondary {
+            background: #6c757d;
+        }
+
+        .test-btn.secondary:hover {
+            background: #5a6268;
+        }
+
+        .test-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #7d9675;
+        }
+
+        .test-list {
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            height: 600px;
+            overflow-y: auto;
+            background: white;
+        }
+
+        .pm-partner-card {
+            padding: 16px;
+            border-bottom: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            gap: 16px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 400ms ease, transform 400ms ease, background 0.2s;
+        }
+
+        .pm-partner-card.pm-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pm-partner-card:hover {
+            background: #f8f9fa;
+        }
+
+        .pm-partner-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 4px;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .pm-partner-info {
+            flex: 1;
+        }
+
+        .pm-partner-info h4 {
+            margin: 0 0 8px 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .pm-partner-address {
+            font-size: 14px;
+            color: #666;
+            margin: 4px 0;
+        }
+
+        .pm-partner-phone {
+            font-size: 14px;
+            color: #666;
+            margin: 4px 0;
+        }
+
+        .pm-skeleton-card {
+            padding: 16px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .pm-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 50%, #f0f0f0 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s ease-in-out infinite;
+            border-radius: 4px;
+        }
+
+        .pm-skeleton-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 4px;
+        }
+
+        .pm-skeleton-text {
+            height: 16px;
+            margin-bottom: 8px;
+        }
+
+        .pm-skeleton-text-lg {
+            height: 20px;
+            width: 70%;
+            margin-bottom: 12px;
+        }
+
+        .pm-skeleton-text-sm {
+            height: 14px;
+            width: 50%;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        .pm-empty-message {
+            text-align: center;
+            color: #666;
+            padding: 40px;
+        }
+
+        .console-log {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .console-log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .console-log-header h3 {
+            margin: 0;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .log-entry {
+            margin-bottom: 4px;
+        }
+
+        .log-time {
+            color: #858585;
+        }
+
+        .log-info {
+            color: #4ec9b0;
+        }
+
+        .log-warn {
+            color: #dcdcaa;
+        }
+
+        .log-error {
+            color: #f48771;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>Virtual Scroll 테스트</h1>
+            <div class="test-controls">
+                <button class="test-btn" onclick="testVirtualScroll()">Virtual Scroll 시작</button>
+                <button class="test-btn secondary" onclick="resetTest()">리셋</button>
+                <button class="test-btn secondary" onclick="measurePerformance()">성능 측정</button>
+            </div>
+        </div>
+
+        <div class="test-stats">
+            <div class="stat-card">
+                <div class="stat-label">전체 아이템</div>
+                <div class="stat-value" id="total-items">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">렌더링된 DOM</div>
+                <div class="stat-value" id="rendered-items">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">메모리 절약</div>
+                <div class="stat-value" id="memory-saved">0%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">로딩 시간</div>
+                <div class="stat-value" id="load-time">0ms</div>
+            </div>
+        </div>
+
+        <div id="test-list" class="test-list"></div>
+
+        <div class="console-log-header">
+            <h3>Console Log</h3>
+            <button class="test-btn secondary" onclick="clearConsole()" style="padding: 5px 10px; font-size: 12px;">Clear</button>
+        </div>
+        <div id="console-log" class="console-log"></div>
+    </div>
+
+    <script src="makeshop-js-virtual-scroll.js"></script>
+    <script>
+        // 테스트 데이터 생성
+        function generateTestData(count) {
+            var data = [];
+            var categories = ['플라워디자인', '압화공예', '꽃집', '원예용품', '교육기관'];
+            var cities = ['서울', '부산', '대구', '인천', '광주', '대전', '울산', '세종', '경기', '강원'];
+
+            for (var i = 1; i <= count; i++) {
+                data.push({
+                    id: i,
+                    name: '파트너업체 ' + i,
+                    category: categories[Math.floor(Math.random() * categories.length)],
+                    address: cities[Math.floor(Math.random() * cities.length)] + ' 테스트구 테스트로 ' + i,
+                    phone: '010-' + String(1000 + i).padStart(4, '0') + '-' + String(1000 + i).padStart(4, '0'),
+                    lat: 37.5 + (Math.random() - 0.5) * 0.5,
+                    lng: 127 + (Math.random() - 0.5) * 0.5
+                });
+            }
+
+            return data;
+        }
+
+        // 카드 HTML 생성
+        function createCardHTML(partner) {
+            return '<div class="pm-partner-card" data-id="' + partner.id + '">' +
+                   '<div class="pm-partner-logo">' + partner.id + '</div>' +
+                   '<div class="pm-partner-info">' +
+                   '<h4>' + partner.name + '</h4>' +
+                   '<p class="pm-partner-address"><i class="ph ph-map-pin"></i> ' + partner.address + '</p>' +
+                   '<p class="pm-partner-phone"><i class="ph ph-phone"></i> ' + partner.phone + '</p>' +
+                   '</div>' +
+                   '</div>';
+        }
+
+        // Console Log 추가
+        function addLog(message, type) {
+            var consoleLog = document.getElementById('console-log');
+            var time = new Date().toLocaleTimeString();
+            var logClass = 'log-' + (type || 'info');
+            var entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = '<span class="log-time">[' + time + ']</span> <span class="' + logClass + '">' + message + '</span>';
+            consoleLog.appendChild(entry);
+            consoleLog.scrollTop = consoleLog.scrollHeight;
+        }
+
+        // Console Log 클리어
+        function clearConsole() {
+            document.getElementById('console-log').innerHTML = '';
+        }
+
+        // Virtual Scroll 인스턴스
+        var virtualScrollInstance = null;
+        var testData = [];
+
+        // Virtual Scroll 테스트
+        function testVirtualScroll() {
+            var startTime = performance.now();
+            addLog('Virtual Scroll 테스트 시작', 'info');
+
+            // 100개 테스트 데이터 생성
+            testData = generateTestData(100);
+            addLog('100개 테스트 데이터 생성 완료', 'info');
+
+            var container = document.getElementById('test-list');
+            container.innerHTML = '';
+
+            // Virtual Scroll 설정
+            var config = {
+                toastDuration: 3000,
+                favoritesKey: 'test_favorites',
+                defaultLogoPath: '/images/default-logo.png'
+            };
+
+            // Virtual Scroll 인스턴스 생성
+            virtualScrollInstance = new VirtualScrollService(config);
+
+            // 카드 클릭 콜백
+            virtualScrollInstance.onCardClick = function(partner) {
+                addLog('카드 클릭: ' + partner.name, 'info');
+            };
+
+            // 초기화
+            virtualScrollInstance.init(container, testData, createCardHTML);
+
+            var endTime = performance.now();
+            var loadTime = Math.round(endTime - startTime);
+
+            // 통계 업데이트
+            updateStats(loadTime);
+
+            addLog('Virtual Scroll 초기화 완료 (로딩 시간: ' + loadTime + 'ms)', 'info');
+        }
+
+        // 통계 업데이트
+        function updateStats(loadTime) {
+            var totalItems = testData.length;
+            var renderedItems = document.querySelectorAll('.pm-partner-card').length;
+            var memorySaved = Math.round((1 - renderedItems / totalItems) * 100);
+
+            document.getElementById('total-items').textContent = totalItems;
+            document.getElementById('rendered-items').textContent = renderedItems;
+            document.getElementById('memory-saved').textContent = memorySaved + '%';
+            document.getElementById('load-time').textContent = loadTime + 'ms';
+
+            addLog('통계: 전체 ' + totalItems + '개, 렌더링 ' + renderedItems + '개, 메모리 절약 ' + memorySaved + '%', 'info');
+        }
+
+        // 테스트 리셋
+        function resetTest() {
+            if (virtualScrollInstance) {
+                virtualScrollInstance.destroy();
+                virtualScrollInstance = null;
+            }
+
+            document.getElementById('test-list').innerHTML = '';
+            document.getElementById('total-items').textContent = '0';
+            document.getElementById('rendered-items').textContent = '0';
+            document.getElementById('memory-saved').textContent = '0%';
+            document.getElementById('load-time').textContent = '0ms';
+
+            addLog('테스트 리셋 완료', 'info');
+        }
+
+        // 성능 측정
+        function measurePerformance() {
+            if (!testData || testData.length === 0) {
+                addLog('먼저 Virtual Scroll을 시작하세요', 'warn');
+                return;
+            }
+
+            addLog('=== 성능 측정 시작 ===', 'info');
+
+            // 1. Virtual Scroll 성능
+            var vsStartTime = performance.now();
+            testVirtualScroll();
+            var vsEndTime = performance.now();
+            var vsTime = Math.round(vsEndTime - vsStartTime);
+            var vsDOMCount = document.querySelectorAll('.pm-partner-card').length;
+
+            addLog('Virtual Scroll: ' + vsTime + 'ms, DOM: ' + vsDOMCount + '개', 'info');
+
+            // 2. 일반 렌더링 성능 (비교)
+            setTimeout(function() {
+                var normalStartTime = performance.now();
+                var container = document.getElementById('test-list');
+                container.innerHTML = testData.map(createCardHTML).join('');
+                var normalEndTime = performance.now();
+                var normalTime = Math.round(normalEndTime - normalStartTime);
+                var normalDOMCount = document.querySelectorAll('.pm-partner-card').length;
+
+                addLog('일반 렌더링: ' + normalTime + 'ms, DOM: ' + normalDOMCount + '개', 'warn');
+
+                // 비교 결과
+                var timeSaved = Math.round((1 - vsTime / normalTime) * 100);
+                var domSaved = Math.round((1 - vsDOMCount / normalDOMCount) * 100);
+
+                addLog('성능 개선: 시간 ' + timeSaved + '% 단축, DOM ' + domSaved + '% 감소', 'info');
+                addLog('=== 성능 측정 완료 ===', 'info');
+
+                // Virtual Scroll 다시 초기화
+                setTimeout(function() {
+                    resetTest();
+                    testVirtualScroll();
+                }, 1000);
+            }, 2000);
+        }
+
+        // 페이지 로드 시 자동 시작
+        window.addEventListener('load', function() {
+            addLog('테스트 페이지 로드 완료', 'info');
+            addLog('"Virtual Scroll 시작" 버튼을 눌러 테스트를 시작하세요', 'info');
+        });
+
+        // 원본 console.log를 가로채서 화면에 표시
+        var originalLog = console.log;
+        console.log = function() {
+            originalLog.apply(console, arguments);
+            var message = Array.prototype.slice.call(arguments).join(' ');
+            if (message.includes('[VirtualScroll]')) {
+                addLog(message, 'info');
+            }
+        };
+
+        var originalWarn = console.warn;
+        console.warn = function() {
+            originalWarn.apply(console, arguments);
+            var message = Array.prototype.slice.call(arguments).join(' ');
+            addLog(message, 'warn');
+        };
+
+        var originalError = console.error;
+        console.error = function() {
+            originalError.apply(console, arguments);
+            var message = Array.prototype.slice.call(arguments).join(' ');
+            addLog(message, 'error');
+        };
+    </script>
+</body>
+</html>
