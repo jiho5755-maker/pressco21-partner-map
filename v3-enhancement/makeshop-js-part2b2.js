@@ -16,6 +16,7 @@
     var filterService = null;
     var searchService = null;
     var uiService = null;
+    var analyticsService = null;
 
     // ========================================
     // 유틸리티 함수
@@ -169,10 +170,20 @@
                         }
                     }
 
+                    // Analytics 추적 - GPS 검색 성공
+                    if (window.AnalyticsService && window.analyticsInstance) {
+                        window.analyticsInstance.trackGPSSearch(lat, lng, true);
+                    }
+
                     uiService.showToast('현재 위치로 이동했습니다.', 'success');
                 },
                 function(error) {
                     console.error('[GPS] 위치 정보 오류:', error);
+
+                    // Analytics 추적 - GPS 검색 실패
+                    if (window.AnalyticsService && window.analyticsInstance) {
+                        window.analyticsInstance.trackGPSSearch(null, null, false);
+                    }
 
                     var message = CONFIG.errorMessages.gpsError;
                     if (error.code === 1) {
@@ -280,6 +291,14 @@
 
                     // 8. UI 서비스 초기화 (이벤트 리스너)
                     uiService.init();
+
+                    // 8.5. Analytics 서비스 초기화
+                    if (window.AnalyticsService) {
+                        analyticsService = new window.AnalyticsService(CONFIG);
+                        window.analyticsInstance = analyticsService;  // 전역 인스턴스 등록
+                        analyticsService.init('G-XXXXXXXXXX');  // 실제 GA4 측정 ID로 교체 필요
+                        console.log('[Main] Analytics 서비스 초기화 완료');
+                    }
 
                     // 9. 마커 생성
                     mapService.createMarkers(partners);

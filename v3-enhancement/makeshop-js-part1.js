@@ -641,6 +641,11 @@ if (typeof window !== 'undefined') {
 
             // 클릭 이벤트
             naver.maps.Event.addListener(marker, 'click', function() {
+                // Analytics 추적 - 지도 마커 클릭
+                if (window.AnalyticsService && window.analyticsInstance) {
+                    window.analyticsInstance.trackMapMarkerClick(partner.id, partner.name);
+                }
+
                 if (window.UIService && window.UIService.showPartnerDetail) {
                     window.UIService.showPartnerDetail(partner);
                 }

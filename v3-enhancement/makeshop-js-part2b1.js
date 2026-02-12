@@ -335,6 +335,11 @@
         // partnerId를 문자열로 통일
         var partnerId = String(partner.id);
 
+        // Analytics 추적 - 파트너 상세 조회
+        if (window.AnalyticsService && window.analyticsInstance) {
+            window.analyticsInstance.trackPartnerView(partner);
+        }
+
         var isFavorite = self.isFavorite(partnerId);
         var favoriteIconClass = isFavorite ? 'ph-fill ph-heart' : 'ph-heart';
         var favoriteIcon = '<i class="ph ' + favoriteIconClass + '"></i>';
@@ -421,6 +426,11 @@
 
         modal.classList.add('pm-modal-active');
         document.body.style.overflow = 'hidden';
+
+        // 모바일: 모달 스와이프 닫기 제스처
+        if (window.innerWidth < 768 && window.TouchService) {
+            self.setupModalSwipe(modal);
+        }
     };
 
     /**
@@ -432,6 +442,32 @@
             modal.classList.remove('pm-modal-active');
             document.body.style.overflow = '';
         }
+    };
+
+    /**
+     * 모달 스와이프 닫기 제스처 설정 (모바일)
+     * @param {HTMLElement} modal - 모달 요소
+     */
+    UIService.prototype.setupModalSwipe = function(modal) {
+        var self = this;
+
+        if (!modal) return;
+
+        var modalContent = modal.querySelector('.pm-modal-content');
+        if (!modalContent) return;
+
+        // TouchService 인스턴스 생성
+        var touchService = new window.TouchService();
+
+        // 스와이프 이벤트 등록
+        touchService.onSwipe(modalContent, function(direction, distance) {
+            if (direction === 'down' && distance > 80) {
+                // 아래로 스와이프: 모달 닫기
+                self.closeModal();
+            }
+        });
+
+        console.log('[UI] 모달 스와이프 제스처 등록 완료');
     };
 
     // ========================================
@@ -456,14 +492,35 @@
         var favorites = self.getFavorites();
         var index = favorites.indexOf(partnerId);
 
+        // 파트너 정보 가져오기 (Analytics용)
+        var partnerName = '';
+        if (self.partners && self.partners.length > 0) {
+            var partner = self.partners.find(function(p) {
+                return String(p.id) === partnerId;
+            });
+            if (partner) {
+                partnerName = partner.name;
+            }
+        }
+
         if (index === -1) {
             // 추가
             favorites.push(partnerId);
             self.showToast('즐겨찾기에 추가되었습니다.', 'success');
+
+            // Analytics 추적
+            if (window.AnalyticsService && window.analyticsInstance) {
+                window.analyticsInstance.trackFavoriteAdd(partnerId, partnerName);
+            }
         } else {
             // 제거
             favorites.splice(index, 1);
             self.showToast('즐겨찾기에서 제거되었습니다.', 'info');
+
+            // Analytics 추적
+            if (window.AnalyticsService && window.analyticsInstance) {
+                window.analyticsInstance.trackFavoriteRemove(partnerId, partnerName);
+            }
         }
 
         self.saveFavorites(favorites);
@@ -560,6 +617,22 @@
 
         modal.classList.add('pm-modal-active');
 
+        // 파트너 정보 가져오기 (Analytics용)
+        var partnerName = '';
+        if (self.partners && self.partners.length > 0) {
+            var partner = self.partners.find(function(p) {
+                return String(p.id) === String(partnerId);
+            });
+            if (partner) {
+                partnerName = partner.name;
+            }
+        }
+
+        // Analytics 추적 - 공유 시작
+        if (window.AnalyticsService && window.analyticsInstance) {
+            window.analyticsInstance.trackShareStart(partnerId, partnerName);
+        }
+
         // 공유 링크
         var shareUrl = window.location.origin + window.location.pathname + '?partner=' + partnerId;
 
@@ -597,11 +670,25 @@
     UIService.prototype.copyLink = function(url) {
         var self = this;
 
+        // URL에서 partnerId 추출
+        var partnerId = '';
+        try {
+            var urlObj = new URL(url);
+            partnerId = urlObj.searchParams.get('partner') || '';
+        } catch (error) {
+            console.error('[UI] URL 파싱 오류:', error);
+        }
+
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(url)
                 .then(function() {
                     self.showToast('링크가 복사되었습니다.', 'success');
                     self.closeShareModal();
+
+                    // Analytics 추적 - 링크 복사
+                    if (window.AnalyticsService && window.analyticsInstance && partnerId) {
+                        window.analyticsInstance.trackShareCopy(partnerId);
+                    }
                 })
                 .catch(function(error) {
                     console.error('[UI] 링크 복사 오류:', error);
@@ -623,6 +710,11 @@
                 document.execCommand('copy');
                 self.showToast('링크가 복사되었습니다.', 'success');
                 self.closeShareModal();
+
+                // Analytics 추적 - 링크 복사 (Fallback)
+                if (window.AnalyticsService && window.analyticsInstance && partnerId) {
+                    window.analyticsInstance.trackShareCopy(partnerId);
+                }
             } catch (error) {
                 console.error('[UI] 링크 복사 오류:', error);
                 self.showToast('링크 복사에 실패했습니다.', 'error');
@@ -639,6 +731,11 @@
      */
     UIService.prototype.shareKakao = function(partnerId) {
         var self = this;
+
+        // Analytics 추적 - 카카오톡 공유
+        if (window.AnalyticsService && window.analyticsInstance) {
+            window.analyticsInstance.trackShareKakao(partnerId);
+        }
 
         // 카카오톡 공유는 카카오 SDK 필요
         // 여기서는 간단한 알림만 표시

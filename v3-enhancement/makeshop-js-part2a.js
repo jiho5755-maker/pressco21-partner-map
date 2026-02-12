@@ -48,6 +48,11 @@
         // URL 파라미터 로드
         self.loadUrlParams();
 
+        // 모바일: 필터 탭 스와이프 제스처
+        if (window.innerWidth < 768 && window.TouchService) {
+            self.setupFilterSwipe();
+        }
+
         console.log('[Filter] 필터 초기화 완료');
     };
 
@@ -236,6 +241,11 @@
 
         // 필터 적용
         self.applyFilters();
+
+        // Analytics 추적 - 필터 변경
+        if (window.AnalyticsService && window.analyticsInstance) {
+            window.analyticsInstance.trackFilterChange(type, value, self.filteredPartners.length);
+        }
 
         // URL 동기화
         self.updateUrlParams();
@@ -586,6 +596,66 @@
     };
 
     // ========================================
+    // 터치 UX - 필터 탭 스와이프
+    // ========================================
+
+    /**
+     * 필터 탭 스와이프 제스처 설정 (모바일)
+     */
+    FilterService.prototype.setupFilterSwipe = function() {
+        var self = this;
+
+        var filterTabs = document.querySelector('.pm-filter-tabs');
+        if (!filterTabs) return;
+
+        var tabs = Array.from(document.querySelectorAll('.pm-filter-tab'));
+        var currentTabIndex = 0;
+
+        // 현재 활성 탭 인덱스 찾기
+        tabs.forEach(function(tab, index) {
+            if (tab.classList.contains('active')) {
+                currentTabIndex = index;
+            }
+        });
+
+        // TouchService 인스턴스 생성
+        var touchService = new window.TouchService();
+
+        // 스와이프 이벤트 등록
+        touchService.onSwipe(filterTabs, function(direction, distance) {
+            if (direction === 'left' && currentTabIndex < tabs.length - 1) {
+                // 왼쪽 스와이프: 다음 탭
+                currentTabIndex++;
+                self.activateTab(tabs[currentTabIndex]);
+            } else if (direction === 'right' && currentTabIndex > 0) {
+                // 오른쪽 스와이프: 이전 탭
+                currentTabIndex--;
+                self.activateTab(tabs[currentTabIndex]);
+            }
+        });
+
+        console.log('[Filter] 필터 탭 스와이프 제스처 등록 완료');
+    };
+
+    /**
+     * 탭 활성화
+     * @param {HTMLElement} tab - 활성화할 탭
+     */
+    FilterService.prototype.activateTab = function(tab) {
+        if (!tab) return;
+
+        // 탭 클릭 이벤트 트리거
+        tab.click();
+
+        // 스크롤하여 탭 가시화
+        tab.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center'
+        });
+    };
+
+    // ========================================
     // 전역 등록
     // ========================================
 
@@ -716,12 +786,21 @@
 
         self.hideAutocomplete();
 
+        // 검색 결과 수 계산
+        var results = self.search(query);
+        var resultCount = results.length;
+
+        // Analytics 추적 - 검색
+        if (window.AnalyticsService && window.analyticsInstance) {
+            window.analyticsInstance.trackSearch(query, resultCount);
+        }
+
         // FilterService에 검색어 전달
         if (window.FilterService && window.FilterService.setSearch) {
             window.FilterService.setSearch(query);
         }
 
-        console.log('[Search] 검색 수행: ' + query);
+        console.log('[Search] 검색 수행: ' + query + ' (' + resultCount + '개 결과)');
     };
 
     /**
