@@ -13,6 +13,7 @@
     function UIService(config) {
         this.config = config;
         this.partners = [];
+        this.virtualScroll = null; // Virtual Scroll 인스턴스
     }
 
     // ========================================
@@ -190,7 +191,7 @@
     };
 
     /**
-     * 파트너 리스트 렌더링
+     * 파트너 리스트 렌더링 (Virtual Scroll 지원)
      * @param {Array} partners - 파트너 배열
      */
     UIService.prototype.renderPartnerList = function(partners) {
@@ -202,8 +203,75 @@
 
         if (partners.length === 0) {
             listContainer.innerHTML = '<p class="pm-empty-message">검색 결과가 없습니다.</p>';
+
+            // Virtual Scroll 해제
+            if (self.virtualScroll) {
+                self.virtualScroll.destroy();
+                self.virtualScroll = null;
+            }
             return;
         }
+
+        // Virtual Scroll 활성화 여부 (30개 이상일 때만)
+        var useVirtualScroll = partners.length >= 30 && window.VirtualScrollService;
+
+        if (useVirtualScroll) {
+            // Virtual Scroll 사용
+            self.renderWithVirtualScroll(partners, listContainer);
+        } else {
+            // 일반 렌더링 (30개 미만)
+            self.renderWithoutVirtualScroll(partners, listContainer);
+        }
+
+        console.log('[UI] 파트너 리스트 렌더링 완료 (' + partners.length + '개, VirtualScroll: ' + useVirtualScroll + ')');
+    };
+
+    /**
+     * Virtual Scroll을 사용한 렌더링
+     * @param {Array} partners - 파트너 배열
+     * @param {HTMLElement} listContainer - 리스트 컨테이너
+     */
+    UIService.prototype.renderWithVirtualScroll = function(partners, listContainer) {
+        var self = this;
+
+        // 기존 Virtual Scroll 해제
+        if (self.virtualScroll) {
+            self.virtualScroll.destroy();
+        }
+
+        // 컨테이너 초기화
+        listContainer.innerHTML = '';
+
+        // Virtual Scroll 생성
+        self.virtualScroll = new window.VirtualScrollService(self.config);
+
+        // 카드 클릭 콜백
+        self.virtualScroll.onCardClick = function(partner) {
+            self.showPartnerDetail(partner);
+
+            // 지도 이동
+            if (window.MapService && window.MapService.moveTo) {
+                window.MapService.moveTo(partner);
+            }
+        };
+
+        // Virtual Scroll 초기화
+        self.virtualScroll.init(
+            listContainer,
+            partners,
+            function(partner) {
+                return self.createPartnerCardHTML(partner);
+            }
+        );
+    };
+
+    /**
+     * Virtual Scroll 없이 일반 렌더링
+     * @param {Array} partners - 파트너 배열
+     * @param {HTMLElement} listContainer - 리스트 컨테이너
+     */
+    UIService.prototype.renderWithoutVirtualScroll = function(partners, listContainer) {
+        var self = this;
 
         var html = partners.map(function(partner) {
             return self.createPartnerCardHTML(partner);
@@ -218,6 +286,12 @@
                 // 즐겨찾기 버튼 클릭은 제외
                 if (e.target.classList.contains('pm-favorite-btn') ||
                     e.target.closest('.pm-favorite-btn')) {
+                    return;
+                }
+
+                // 공유 버튼 클릭은 제외
+                if (e.target.classList.contains('pm-share-btn') ||
+                    e.target.closest('.pm-share-btn')) {
                     return;
                 }
 
@@ -257,8 +331,6 @@
                 card.classList.add('pm-visible');
             });
         }
-
-        console.log('[UI] 파트너 리스트 렌더링 완료 (' + partners.length + '개)');
     };
 
     /**

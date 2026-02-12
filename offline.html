@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오프라인 - 프레스코21 파트너맵</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #F5F7F6 0%, #E8EDE9 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .offline-container {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .offline-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 32px;
+            background: linear-gradient(135deg, #7D9675 0%, #5A6F52 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+        }
+
+        .offline-icon i {
+            font-size: 64px;
+            color: white;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 8px 32px rgba(125, 150, 117, 0.3);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 12px 48px rgba(125, 150, 117, 0.4);
+            }
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #2C3E2F;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #5A6F52;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .offline-info {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            margin-bottom: 24px;
+        }
+
+        .offline-info h2 {
+            font-size: 20px;
+            color: #2C3E2F;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .offline-info h2 i {
+            color: #7D9675;
+        }
+
+        .offline-info p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .offline-info ul {
+            list-style: none;
+            margin-top: 16px;
+        }
+
+        .offline-info li {
+            font-size: 16px;
+            color: #666;
+            padding: 12px;
+            margin: 8px 0;
+            background: #F5F7F6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .offline-info li i {
+            color: #7D9675;
+            font-size: 20px;
+        }
+
+        .retry-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #7D9675 0%, #5A6F52 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 32px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(125, 150, 117, 0.3);
+        }
+
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(125, 150, 117, 0.4);
+        }
+
+        .retry-btn:active {
+            transform: translateY(0);
+        }
+
+        .retry-btn i {
+            font-size: 20px;
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 24px;
+            padding: 12px 24px;
+            background: #FFF3CD;
+            border: 1px solid #FFD700;
+            border-radius: 8px;
+            color: #856404;
+            font-size: 14px;
+        }
+
+        .status-indicator i {
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+
+            .offline-info {
+                padding: 24px;
+            }
+
+            .retry-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">
+            <i class="ph ph-wifi-slash"></i>
+        </div>
+
+        <h1>오프라인 상태입니다</h1>
+        <p class="subtitle">인터넷 연결이 끊어져 새로운 데이터를 불러올 수 없습니다.</p>
+
+        <div class="offline-info">
+            <h2>
+                <i class="ph ph-info"></i>
+                오프라인 모드 안내
+            </h2>
+            <p>
+                파트너맵은 오프라인에서도 제한적으로 사용 가능합니다:
+            </p>
+            <ul>
+                <li>
+                    <i class="ph ph-check-circle"></i>
+                    이전에 방문한 페이지는 캐시에서 로드됩니다
+                </li>
+                <li>
+                    <i class="ph ph-check-circle"></i>
+                    저장된 즐겨찾기를 확인할 수 있습니다
+                </li>
+                <li>
+                    <i class="ph ph-x-circle"></i>
+                    지도 및 실시간 데이터는 사용할 수 없습니다
+                </li>
+            </ul>
+        </div>
+
+        <button class="retry-btn" onclick="window.location.reload()">
+            <i class="ph ph-arrow-clockwise"></i>
+            다시 시도
+        </button>
+
+        <div class="status-indicator" id="status-indicator">
+            <i class="ph ph-warning"></i>
+            네트워크 연결을 확인하고 있습니다...
+        </div>
+    </div>
+
+    <script>
+        // 온라인 상태 감지 및 자동 새로고침
+        window.addEventListener('online', function() {
+            var indicator = document.getElementById('status-indicator');
+            if (indicator) {
+                indicator.style.background = '#D4EDDA';
+                indicator.style.border = '1px solid #28A745';
+                indicator.style.color = '#155724';
+                indicator.innerHTML = '<i class="ph ph-check-circle"></i> 인터넷에 연결되었습니다. 잠시 후 자동으로 새로고침됩니다...';
+            }
+
+            // 2초 후 자동 새로고침
+            setTimeout(function() {
+                window.location.reload();
+            }, 2000);
+        });
+
+        // 주기적으로 온라인 상태 확인 (10초마다)
+        setInterval(function() {
+            if (navigator.onLine) {
+                window.location.reload();
+            }
+        }, 10000);
+
+        // 초기 온라인 상태 확인
+        if (navigator.onLine) {
+            setTimeout(function() {
+                window.location.reload();
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

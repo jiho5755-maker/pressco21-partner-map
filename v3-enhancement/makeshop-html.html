@@ -2,6 +2,24 @@
      파트너맵 v3 - 메이크샵 HTML (디자인 편집 탭용)
      ======================================== -->
 
+<!-- PWA 메타 태그 -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#7D9675">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="파트너맵">
+
+<!-- iOS Safari PWA 메타 태그 -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="파트너맵">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192.png">
+
+<!-- Windows Tile -->
+<meta name="msapplication-TileColor" content="#7D9675">
+<meta name="msapplication-TileImage" content="/icons/icon-144.png">
+
 <!-- Phosphor Icons (아이콘 라이브러리) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css">
@@ -20,6 +38,9 @@
 
 <!-- 네이버 지도 SDK (동적 로딩 대신 직접 로드) -->
 <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=bfp8odep5r"></script>
+
+<!-- Virtual Scrolling Service (메이크샵 JS 전용 탭에 업로드 필요) -->
+<!-- <script src="makeshop-js-virtual-scroll.js"></script> -->
 
 <!-- 테마 시스템 (메이크샵 JS 전용 탭에 업로드 필요) -->
 <!-- <script src="theme.js"></script> -->
