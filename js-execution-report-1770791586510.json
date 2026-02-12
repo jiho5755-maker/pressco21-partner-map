@@ -1,0 +1,84 @@
+{
+  "timestamp": "2026-02-11T06:33:06.509Z",
+  "allLogs": [],
+  "allErrors": [],
+  "scriptStatus": [
+    {
+      "src": "https://wcs.naver.net/wcslog.js",
+      "loaded": true,
+      "async": false,
+      "defer": false
+    },
+    {
+      "src": "https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=bfp8odep5r",
+      "loaded": true,
+      "async": false,
+      "defer": false
+    },
+    {
+      "src": "https://www.foreverlove.co.kr/shopimages/jewoo/template/work/49398/page.2602.js?t=202602111444",
+      "loaded": true,
+      "async": false,
+      "defer": false
+    }
+  ],
+  "configDetails": {
+    "exists": true,
+    "useTestData": true,
+    "testDataPath": "/test-data/partners-200.json",
+    "googleSheetApiUrl": "https://script.google.com/macros/s/AKfycbxfp4SbpsUCmQu0gnF02r8oMY0dzzadElkcTcFNSsxPNo3x4zsNcw-z8MvJ3F7xskP6Yw/exec",
+    "naverMapNcpKeyId": "설정됨"
+  },
+  "globalObjects": {
+    "CONFIG": "object",
+    "PARTNERMAP_CONFIG": "object",
+    "PartnerAPI": "function",
+    "PartnerMapApp": "undefined",
+    "naver": "object",
+    "naverMaps": "object",
+    "jQuery": "function"
+  },
+  "executionTrace": {
+    "hasIIFE": true,
+    "windowKeys": [
+      "createImageBitmap",
+      "CONFIG",
+      "PARTNERMAP_CONFIG",
+      "PartnerAPI",
+      "MapService"
+    ],
+    "documentReady": "complete",
+    "DOMContentLoaded": "DOMContentLoaded 완료됨"
+  },
+  "networkLog": [],
+  "manualInit": {
+    "status": "PartnerMapApp 없음",
+    "scriptSrc": "https://www.foreverlove.co.kr/shopimages/jewoo/template/work/49398/page.2602.js?t=202602111444",
+    "scriptLoaded": true
+  },
+  "scriptContent": {
+    "status": 200,
+    "contentLength": 85976,
+    "hasIIFE": true,
+    "hasPartnerMapApp": false,
+    "hasInit": true,
+    "firstLines": "/**\n * ��Ʈ�ʸ� v3 - ���� ����\n * ����ũ�� D4 �÷��� ����ȭ\n * v2 ������ Google Sheets ��� ��Ű��ó ����\n */\n\nvar CONFIG = {\n    // ========================================\n    // ���̹� ���� API (ncpKeyId ����)\n    // ========================================\n    naverMapNcpKeyId: 'bfp8odep5r',\n\n    // ========================================\n    // Google Sheets API (v2�� ����)\n    // ========================================\n    googleSheetApiUrl: 'https://script.google.com/macros/s/AKfycbxfp4SbpsUCmQu",
+    "hasSyntaxError": false
+  },
+  "storageStatus": {
+    "hasCachedData": false,
+    "cacheSize": 0,
+    "allKeys": []
+  },
+  "diagnosis": {
+    "scriptLoaded": true,
+    "configExists": true,
+    "partnerMapAppExists": false,
+    "naverMapsLoaded": true,
+    "dataLoadAttempted": false,
+    "possibleCauses": [
+      "PartnerMapApp IIFE가 실행되지 않음 (구문 오류 가능성)",
+      "데이터 로드 시도가 전혀 없음 (초기화 실패)"
+    ]
+  }
+}

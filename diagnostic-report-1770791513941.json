@@ -1,0 +1,358 @@
+{
+  "timestamp": "2026-02-11T06:31:21.426Z",
+  "url": "https://www.foreverlove.co.kr/shop/page.html?id=2602",
+  "consoleLogs": [],
+  "consoleErrors": [],
+  "networkRequests": [
+    {
+      "url": "https://www.foreverlove.co.kr/shop/page.html?id=2602",
+      "status": 200,
+      "statusText": "",
+      "method": "GET",
+      "timestamp": "2026-02-11T06:31:23.209Z"
+    },
+    {
+      "url": "https://www.foreverlove.co.kr/shopimages/jewoo/template/work/49398/common.css?r=1770776114",
+      "status": 200,
+      "statusText": "",
+      "method": "GET",
+      "timestamp": "2026-02-11T06:31:23.230Z"
+    },
+    {
+      "url": "https://www.foreverlove.co.kr/images/d3/m_01/css/font-awesome.min.css",
+      "status": 200,
+      "statusText": "",
+      "method": "GET",
+      "timestamp": "2026-02-11T06:31:23.237Z"
+    },
+    {
+      "url": "https://www.foreverlove.co.kr/js/jquery-1.7.2.min.js",
+      "status": 200,
+      "statusText": "",
+      "method": "GET",
+      "timestamp": "2026-02-11T06:31:23.239Z"
+    },
+    {
+      "url": "https://www.foreverlove.co.kr/shopimages/jewoo/template/work/49398/page.2602.css?t=202602111444",
+      "status": 200,
+      "statusText": "",
+      "method": "GET",
+      "timestamp": "2026-02-11T06:31:23.247Z"
+    },
+    {
+      "url": "https://www.foreverlove.co.kr/js/lazyload.min.js",
+      "status": 200,
+      "statusText": "",
+      "method": "GET",
+      "timestamp": "2026-02-11T06:31:23.248Z"
+    },
+    {
+      "url": "https://www.foreverlove.co.kr/js/flash.js",
+      "status": 200,
+      "statusText": "",
+      "method": "GET",
+      "timestamp": "2026-02-11T06:31:23.248Z"
+    },
+    {
+      "url": "https://www.foreverlove.co.kr/js/neodesign/rightbanner.js",
+      "status": 200,
+      "statusText": "",
+      "method": "GET",
+      "timestamp": "2026-02-11T06:31:23.249Z"
+    },
+    {
+      "url": "https://www.foreverlove.co.kr/js/bookmark.js",
+      "status": 200,
+      "statusText": "",
+      "method": "GET",
+      "timestamp": "2026-02-11T06:31:23.249Z"
+    },
+    {
+      "url": "https://www.foreverlove.co.kr/shopimages/jewoo/template/work/49398/page.2602.js?t=202602111444",
+      "status": 200,
+      "statusText": "",
+      "method": "GET",
+      "timestamp": "2026-02-11T06:31:23.249Z"
+    },
+    {
+      "url": "https://www.foreverlove.co.kr/js/wishlist.js?v=20210705",
+      "status": 200,
+      "statusText": "",
+      "method": "GET",
+      "timestamp": "2026-02-11T06:31:23.255Z"
+    },
+    {
+      "url": "https://www.foreverlove.co.kr/js/jquery.form.js",
+      "status": 200,
+      "statusText": "",
+      "method": "GET",
+      "timestamp": "2026-02-11T06:31:23.255Z"
+    },
+    {
+      "url": "https://www.foreverlove.co.kr/m/js/login.js",
+      "status": 200,
+      "statusText": "",
+      "method": "GET",
+      "timestamp": "2026-02-11T06:31:23.255Z"
+    },
+    {
+      "url": "https://www.foreverlove.co.kr/js/referer_cookie.js",
+      "status": 200,
+      "statusText": "",
+      "method": "GET",
+      "timestamp": "2026-02-11T06:31:23.255Z"
+    },
+    {
+      "url": "https://www.foreverlove.co.kr/js/cookie.js",
+      "status": 200,
+      "statusText": "",
+      "method": "GET",
+      "timestamp": "2026-02-11T06:31:23.255Z"
+    },
+    {
+      "url": "https://www.foreverlove.co.kr/js/product_rollover_image.js",
+      "status": 200,
+      "statusText": "",
+      "method": "GET",
+      "timestamp": "2026-02-11T06:31:23.255Z"
+    },
+    {
+      "url": "https://www.foreverlove.co.kr/shopimages/jewoo/template/work/49398/common.js?r=1770776114",
+      "status": 200,
+      "statusText": "",
+      "method": "GET",
+      "timestamp": "2026-02-11T06:31:23.255Z"
+    },
+    {
+      "url": "https://www.foreverlove.co.kr/log/log31/js/mslog.js?r=0.1455119533038166",
+      "status": 200,
+      "statusText": "",
+      "method": "GET",
+      "timestamp": "2026-02-11T06:31:23.357Z"
+    },
+    {
+      "url": "https://www.foreverlove.co.kr/log/log31/ms.log?domain=foreverlove.co.kr&url=aHR0cHM6Ly93d3cuZm9yZXZlcmxvdmUuY28ua3Ivc2hvcC9wYWdlLmh0bWw/aWQ9MjYwMg==&&code=jewoo&&var=V1ZSdmVrOXVkSHBQYWtWNlQybEtkbU50VW14amJEbHlXbGhzTTJJelNtdEphblJQVHpOTk5rNXFiMmxqYlZadFpGaEtjMGxxZEU5UE0wMDJUbFJ2YVdSSE9XdFpXR3RwVHpOTk5rMUViMmxKYW5RNQ==&&resolution=1920_1080&init=ok&initday=ok&initkey=0.22762430036607273&referer=&r=0.4481165664068777",
+      "status": 200,
+      "statusText": "",
+      "method": "GET",
+      "timestamp": "2026-02-11T06:31:23.433Z"
+    }
+  ],
+  "domStructure": {
+    "5000ms": {
+      "containerExists": true,
+      "containerHTML": "<div id=\"partnermap-container\">\n\n    <!-- 로딩 오버레이 -->\n    <div id=\"pm-loading-overlay\" class=\"pm-loading-overlay\">\n        <div class=\"pm-spinner\"></div>\n        <p>파트너 데이터를 불러오는 중...</p>\n    </div>\n\n    <!-- 히어로 섹션 -->\n    <section class=\"pm-hero\">\n        <h1 class=\"pm-hero-title\">전국 제휴 업체 지도</h1>\n        <p class=\"pm-hero-subtitle\">프레스코21과 함께하는 압화·플라워디자인 업체를 찾아보세요</p>\n    </section>\n\n    <!-- 검색 및 필터 영역 -->\n    <section class=\"pm-search-filter\">\n        <div class=\"pm-search-container\">\n     ",
+      "loadingOverlayExists": true,
+      "loadingOverlayDisplay": "flex",
+      "naverMapExists": true,
+      "naverMapHTML": "<div id=\"naverMap\" class=\"pm-map\"></div>",
+      "markerCount": 0,
+      "bodyClasses": "",
+      "visibleElements": {
+        "header": false,
+        "footer": false,
+        "mapContainer": true
+      }
+    },
+    "10000ms": {
+      "containerExists": true,
+      "containerHTML": "<div id=\"partnermap-container\">\n\n    <!-- 로딩 오버레이 -->\n    <div id=\"pm-loading-overlay\" class=\"pm-loading-overlay\">\n        <div class=\"pm-spinner\"></div>\n        <p>파트너 데이터를 불러오는 중...</p>\n    </div>\n\n    <!-- 히어로 섹션 -->\n    <section class=\"pm-hero\">\n        <h1 class=\"pm-hero-title\">전국 제휴 업체 지도</h1>\n        <p class=\"pm-hero-subtitle\">프레스코21과 함께하는 압화·플라워디자인 업체를 찾아보세요</p>\n    </section>\n\n    <!-- 검색 및 필터 영역 -->\n    <section class=\"pm-search-filter\">\n        <div class=\"pm-search-container\">\n     ",
+      "loadingOverlayExists": true,
+      "loadingOverlayDisplay": "flex",
+      "naverMapExists": true,
+      "naverMapHTML": "<div id=\"naverMap\" class=\"pm-map\"></div>",
+      "markerCount": 0,
+      "bodyClasses": "",
+      "visibleElements": {
+        "header": false,
+        "footer": false,
+        "mapContainer": true
+      }
+    },
+    "15000ms": {
+      "containerExists": true,
+      "containerHTML": "<div id=\"partnermap-container\">\n\n    <!-- 로딩 오버레이 -->\n    <div id=\"pm-loading-overlay\" class=\"pm-loading-overlay\">\n        <div class=\"pm-spinner\"></div>\n        <p>파트너 데이터를 불러오는 중...</p>\n    </div>\n\n    <!-- 히어로 섹션 -->\n    <section class=\"pm-hero\">\n        <h1 class=\"pm-hero-title\">전국 제휴 업체 지도</h1>\n        <p class=\"pm-hero-subtitle\">프레스코21과 함께하는 압화·플라워디자인 업체를 찾아보세요</p>\n    </section>\n\n    <!-- 검색 및 필터 영역 -->\n    <section class=\"pm-search-filter\">\n        <div class=\"pm-search-container\">\n     ",
+      "loadingOverlayExists": true,
+      "loadingOverlayDisplay": "flex",
+      "naverMapExists": true,
+      "naverMapHTML": "<div id=\"naverMap\" class=\"pm-map\"></div>",
+      "markerCount": 0,
+      "bodyClasses": "",
+      "visibleElements": {
+        "header": false,
+        "footer": false,
+        "mapContainer": true
+      }
+    }
+  },
+  "globalVariables": {
+    "5000ms": {
+      "hasPartnerMapApp": false,
+      "partnerMapAppKeys": [],
+      "hasCONFIG": true,
+      "configKeys": [
+        "naverMapNcpKeyId",
+        "googleSheetApiUrl",
+        "useTestData",
+        "testDataPath",
+        "cacheKey",
+        "cacheVersion",
+        "cacheDuration",
+        "defaultCenter",
+        "defaultZoom",
+        "clusterZoom",
+        "minZoomForMarkers",
+        "partnerTypeColors",
+        "categoryColors",
+        "fuseOptions",
+        "toastDuration",
+        "autocompleteLimit",
+        "searchMinLength",
+        "debounceDelay",
+        "clusterGridSize",
+        "clusterMinSize",
+        "gpsSearchRadius",
+        "gpsZoomLevel",
+        "favoritesKey",
+        "defaultLogoPath",
+        "lazyLoadThreshold",
+        "breakpoints",
+        "errorMessages",
+        "validate",
+        "extractRegion",
+        "getPartnerTypeColor",
+        "getCategoryColor",
+        "getDeviceType"
+      ],
+      "hasNaverMaps": true,
+      "customGlobals": [
+        "createImageBitmap",
+        "CONFIG",
+        "PARTNERMAP_CONFIG",
+        "PartnerAPI"
+      ]
+    },
+    "10000ms": {
+      "hasPartnerMapApp": false,
+      "partnerMapAppKeys": [],
+      "hasCONFIG": true,
+      "configKeys": [
+        "naverMapNcpKeyId",
+        "googleSheetApiUrl",
+        "useTestData",
+        "testDataPath",
+        "cacheKey",
+        "cacheVersion",
+        "cacheDuration",
+        "defaultCenter",
+        "defaultZoom",
+        "clusterZoom",
+        "minZoomForMarkers",
+        "partnerTypeColors",
+        "categoryColors",
+        "fuseOptions",
+        "toastDuration",
+        "autocompleteLimit",
+        "searchMinLength",
+        "debounceDelay",
+        "clusterGridSize",
+        "clusterMinSize",
+        "gpsSearchRadius",
+        "gpsZoomLevel",
+        "favoritesKey",
+        "defaultLogoPath",
+        "lazyLoadThreshold",
+        "breakpoints",
+        "errorMessages",
+        "validate",
+        "extractRegion",
+        "getPartnerTypeColor",
+        "getCategoryColor",
+        "getDeviceType"
+      ],
+      "hasNaverMaps": true,
+      "customGlobals": [
+        "createImageBitmap",
+        "CONFIG",
+        "PARTNERMAP_CONFIG",
+        "PartnerAPI"
+      ]
+    },
+    "15000ms": {
+      "hasPartnerMapApp": false,
+      "partnerMapAppKeys": [],
+      "hasCONFIG": true,
+      "configKeys": [
+        "naverMapNcpKeyId",
+        "googleSheetApiUrl",
+        "useTestData",
+        "testDataPath",
+        "cacheKey",
+        "cacheVersion",
+        "cacheDuration",
+        "defaultCenter",
+        "defaultZoom",
+        "clusterZoom",
+        "minZoomForMarkers",
+        "partnerTypeColors",
+        "categoryColors",
+        "fuseOptions",
+        "toastDuration",
+        "autocompleteLimit",
+        "searchMinLength",
+        "debounceDelay",
+        "clusterGridSize",
+        "clusterMinSize",
+        "gpsSearchRadius",
+        "gpsZoomLevel",
+        "favoritesKey",
+        "defaultLogoPath",
+        "lazyLoadThreshold",
+        "breakpoints",
+        "errorMessages",
+        "validate",
+        "extractRegion",
+        "getPartnerTypeColor",
+        "getCategoryColor",
+        "getDeviceType"
+      ],
+      "hasNaverMaps": true,
+      "customGlobals": [
+        "createImageBitmap",
+        "CONFIG",
+        "PARTNERMAP_CONFIG",
+        "PartnerAPI"
+      ]
+    }
+  },
+  "screenshots": [
+    "/Users/jangjiho/workspace/partner-map/deployed-page-5000ms.png",
+    "/Users/jangjiho/workspace/partner-map/deployed-page-10000ms.png",
+    "/Users/jangjiho/workspace/partner-map/deployed-page-15000ms.png"
+  ],
+  "loadingState": {
+    "totalLoadTime": 30.882,
+    "isInfiniteLoading": true,
+    "loadingCompleted": false,
+    "isLoadingVisible": true,
+    "loadingDisplay": "flex",
+    "hasMapInstance": true,
+    "documentReadyState": "complete",
+    "performanceTiming": {
+      "domContentLoaded": 234,
+      "loadComplete": 418
+    }
+  },
+  "summary": {
+    "totalConsoleMessages": 0,
+    "totalErrors": 0,
+    "totalNetworkRequests": 19,
+    "apiCallsSuccess": 0,
+    "apiCallsFailed": 0,
+    "hasInfiniteLoading": true,
+    "criticalIssues": [
+      "무한 로딩 상태",
+      "마커가 표시되지 않음"
+    ]
+  }
+}

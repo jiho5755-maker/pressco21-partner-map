@@ -158,96 +158,99 @@
     // ========================================
 
     /**
-     * 파트너맵 초기화
+     * 파트너맵 초기화 (메이크샵 호환: Promise 체이닝)
      */
-    async function initPartnerMap() {
-        try {
-            console.log('[Main] 파트너맵 v3 초기화 시작');
+    function initPartnerMap() {
+        console.log('[Main] 파트너맵 v3 초기화 시작');
 
-            // 0. 설정 검증
-            var validation = CONFIG.validate();
-            if (!validation.isValid) {
-                console.error('[Main] 설정 오류:', validation.errors);
-                validation.errors.forEach(function(error) {
-                    console.error('  - ' + error);
-                });
-            }
-
-            // 1. UI 서비스 초기화 (로딩 표시를 위해 가장 먼저)
-            uiService = new window.UIServiceClass(CONFIG);
-            window.UIService = uiService;  // 전역 인스턴스 등록
-            uiService.showLoading();
-
-            // 2. API 클라이언트 초기화
-            apiClient = new window.PartnerAPI(CONFIG);
-            console.log('[Main] API 클라이언트 생성 완료');
-
-            // 3. 네이버 지도 SDK 로드
-            mapService = new window.MapService(CONFIG);
-            window.MapService = mapService;  // 전역 인스턴스 등록
-            await mapService.loadSDK();
-
-            // 4. 파트너 데이터 로드
-            console.log('[Main] 파트너 데이터 로드 시작...');
-            var partners = await apiClient.loadPartnerData();
-            console.log('[Main] 파트너 데이터 로드 완료 (' + partners.length + '개)');
-
-            // 5. 지도 초기화
-            mapService.init('naverMap');
-            console.log('[Main] 지도 초기화 완료');
-
-            // 6. 필터 서비스 초기화
-            filterService = new window.FilterService(CONFIG);
-            window.FilterService = filterService;  // 전역 인스턴스 등록
-            filterService.init(partners);
-
-            // 7. 검색 서비스 초기화
-            searchService = new window.SearchService(CONFIG);
-            window.SearchService = searchService;  // 전역 인스턴스 등록
-            searchService.init(partners);
-
-            // 8. UI 서비스 초기화 (이벤트 리스너)
-            uiService.init();
-
-            // 9. 마커 생성
-            mapService.createMarkers(partners);
-
-            // 10. 파트너 리스트 렌더링
-            uiService.renderPartnerList(partners);
-
-            // 11. GPS 버튼 설정
-            setupGPSButton();
-
-            // 12. 기준점 초기화 버튼 설정
-            setupClearReferenceButton();
-
-            // 13. URL 파라미터 처리 (특정 파트너 직접 접근)
-            handleUrlParams(partners);
-
-            // 14. 로딩 숨김
-            uiService.hideLoading();
-
-            // 15. 성공 알림
-            uiService.showToast(partners.length + '개의 제휴 업체를 불러왔습니다.', 'success');
-
-            console.log('[Main] 초기화 완료');
-
-        } catch (error) {
-            console.error('[Main] 초기화 실패:', error);
-
-            if (uiService) {
-                uiService.hideLoading();
-                uiService.showToast('지도를 불러오는 중 오류가 발생했습니다.', 'error');
-            }
-
-            // 오류 메시지 표시 - createElement 대신 미리 만들어진 요소 사용
-            var errorDiv = document.getElementById('pm-error-message');
-            if (errorDiv) {
-                errorDiv.style.cssText = 'display: block; padding: 40px; text-align: center; color: #F44336;';
-                errorDiv.innerHTML = '<h2>오류 발생</h2><p>' + CONFIG.errorMessages.apiError + '</p>' +
-                                     '<p style="font-size: 14px; color: #808080;">자세한 내용은 콘솔을 확인해주세요.</p>';
-            }
+        // 0. 설정 검증
+        var validation = CONFIG.validate();
+        if (!validation.isValid) {
+            console.error('[Main] 설정 오류:', validation.errors);
+            validation.errors.forEach(function(error) {
+                console.error('  - ' + error);
+            });
         }
+
+        // 1. UI 서비스 초기화 (로딩 표시를 위해 가장 먼저)
+        uiService = new window.UIServiceClass(CONFIG);
+        window.UIService = uiService;  // 전역 인스턴스 등록
+        uiService.showLoading();
+
+        // 2. API 클라이언트 초기화
+        apiClient = new window.PartnerAPI(CONFIG);
+        console.log('[Main] API 클라이언트 생성 완료');
+
+        // 3. 네이버 지도 SDK 로드
+        mapService = new window.MapService(CONFIG);
+        window.MapService = mapService;  // 전역 인스턴스 등록
+
+        // Promise 체이닝으로 비동기 처리
+        mapService.loadSDK()
+            .then(function() {
+                // 4. 파트너 데이터 로드
+                console.log('[Main] 파트너 데이터 로드 시작...');
+                return apiClient.loadPartnerData();
+            })
+            .then(function(partners) {
+                console.log('[Main] 파트너 데이터 로드 완료 (' + partners.length + '개)');
+
+                // 5. 지도 초기화
+                mapService.init('naverMap');
+                console.log('[Main] 지도 초기화 완료');
+
+                // 6. 필터 서비스 초기화
+                filterService = new window.FilterService(CONFIG);
+                window.FilterService = filterService;  // 전역 인스턴스 등록
+                filterService.init(partners);
+
+                // 7. 검색 서비스 초기화
+                searchService = new window.SearchService(CONFIG);
+                window.SearchService = searchService;  // 전역 인스턴스 등록
+                searchService.init(partners);
+
+                // 8. UI 서비스 초기화 (이벤트 리스너)
+                uiService.init();
+
+                // 9. 마커 생성
+                mapService.createMarkers(partners);
+
+                // 10. 파트너 리스트 렌더링
+                uiService.renderPartnerList(partners);
+
+                // 11. GPS 버튼 설정
+                setupGPSButton();
+
+                // 12. 기준점 초기화 버튼 설정
+                setupClearReferenceButton();
+
+                // 13. URL 파라미터 처리 (특정 파트너 직접 접근)
+                handleUrlParams(partners);
+
+                // 14. 로딩 숨김
+                uiService.hideLoading();
+
+                // 15. 성공 알림
+                uiService.showToast(partners.length + '개의 제휴 업체를 불러왔습니다.', 'success');
+
+                console.log('[Main] 초기화 완료');
+            })
+            .catch(function(error) {
+                console.error('[Main] 초기화 실패:', error);
+
+                if (uiService) {
+                    uiService.hideLoading();
+                    uiService.showToast('지도를 불러오는 중 오류가 발생했습니다.', 'error');
+                }
+
+                // 오류 메시지 표시 - createElement 대신 미리 만들어진 요소 사용
+                var errorDiv = document.getElementById('pm-error-message');
+                if (errorDiv) {
+                    errorDiv.style.cssText = 'display: block; padding: 40px; text-align: center; color: #F44336;';
+                    errorDiv.innerHTML = '<h2>오류 발생</h2><p>' + CONFIG.errorMessages.apiError + '</p>' +
+                                         '<p style="font-size: 14px; color: #808080;">자세한 내용은 콘솔을 확인해주세요.</p>';
+                }
+            });
     }
 
     /**
