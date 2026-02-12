@@ -457,8 +457,18 @@
 
         modal.classList.add('pm-modal-active');
 
-        // 공유 링크
-        var shareUrl = window.location.origin + window.location.pathname + '?partner=' + partnerId;
+        // 공유 링크 (기존 쿼리 파라미터 유지)
+        var baseUrl = window.location.origin + window.location.pathname;
+        var existingParams = window.location.search;
+        var shareUrl;
+
+        if (existingParams && existingParams.length > 1) {
+            // 기존 파라미터가 있으면 & 로 추가
+            shareUrl = baseUrl + existingParams + '&partner=' + partnerId;
+        } else {
+            // 기존 파라미터가 없으면 ? 로 시작
+            shareUrl = baseUrl + '?partner=' + partnerId;
+        }
 
         // 링크 복사 버튼
         var copyBtn = document.getElementById('pm-share-copy');
