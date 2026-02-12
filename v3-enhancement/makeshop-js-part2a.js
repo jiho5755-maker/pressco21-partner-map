@@ -298,7 +298,8 @@
             // 즐겨찾기
             if (self.currentFilters.favorites) {
                 var favorites = JSON.parse(localStorage.getItem(self.config.favoritesKey) || '[]');
-                if (!favorites.includes(partner.id)) {
+                // partnerId를 문자열로 통일 (타입 불일치 방지)
+                if (!favorites.includes(String(partner.id))) {
                     return false;
                 }
             }

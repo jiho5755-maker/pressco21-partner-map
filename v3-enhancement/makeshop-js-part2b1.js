@@ -269,7 +269,10 @@
     UIService.prototype.createPartnerCardHTML = function(partner) {
         var self = this;
 
-        var isFavorite = self.isFavorite(partner.id);
+        // partnerId를 문자열로 통일
+        var partnerId = String(partner.id);
+
+        var isFavorite = self.isFavorite(partnerId);
         var favoriteIconClass = isFavorite ? 'ph-fill ph-heart' : 'ph-heart';
         var favoriteIcon = '<i class="ph ' + favoriteIconClass + '"></i>';
         var favoriteClass = isFavorite ? 'active' : '';
@@ -291,9 +294,9 @@
             distanceHtml = '<span class="pm-distance-badge"><i class="ph ph-ruler"></i> ' + partner.distance.toFixed(1) + 'km</span>';
         }
 
-        return '<div class="pm-partner-card" data-partner-id="' + partner.id + '" role="article" aria-label="' + escapedName + ' 업체 정보">' +
+        return '<div class="pm-partner-card" data-partner-id="' + partnerId + '" role="article" aria-label="' + escapedName + ' 업체 정보">' +
                '<button class="pm-favorite-btn ' + favoriteClass + '" ' +
-               'data-partner-id="' + partner.id + '" ' +
+               'data-partner-id="' + partnerId + '" ' +
                'title="즐겨찾기" ' +
                'aria-label="' + escapedName + ' ' + (isFavorite ? '즐겨찾기 제거' : '즐겨찾기 추가') + '">' +
                favoriteIcon +
@@ -328,7 +331,10 @@
         var modalBody = document.getElementById('pm-modal-body');
         if (!modal || !modalBody) return;
 
-        var isFavorite = self.isFavorite(partner.id);
+        // partnerId를 문자열로 통일
+        var partnerId = String(partner.id);
+
+        var isFavorite = self.isFavorite(partnerId);
         var favoriteIconClass = isFavorite ? 'ph-fill ph-heart' : 'ph-heart';
         var favoriteIcon = '<i class="ph ' + favoriteIconClass + '"></i>';
         var favoriteText = isFavorite ? '즐겨찾기됨' : '즐겨찾기';
@@ -356,12 +362,12 @@
                    '</div>' +
                    '<div class="pm-modal-actions">' +
                    '<button class="pm-action-btn pm-favorite-btn ' + favoriteClass + '" ' +
-                   'data-partner-id="' + partner.id + '" ' +
+                   'data-partner-id="' + partnerId + '" ' +
                    'aria-label="' + favoriteText + '">' +
                    favoriteIcon + ' ' + favoriteText +
                    '</button>' +
                    '<button class="pm-action-btn pm-share-btn" ' +
-                   'data-partner-id="' + partner.id + '" ' +
+                   'data-partner-id="' + partnerId + '" ' +
                    'aria-label="' + escapedName + ' 공유하기">' +
                    '<i class="ph ph-share-network"></i> 공유하기' +
                    '</button>' +
@@ -442,6 +448,9 @@
             event.stopPropagation();
         }
 
+        // partnerId를 문자열로 통일 (타입 불일치 방지)
+        partnerId = String(partnerId);
+
         var favorites = self.getFavorites();
         var index = favorites.indexOf(partnerId);
 
@@ -474,6 +483,8 @@
      * @returns {boolean}
      */
     UIService.prototype.isFavorite = function(partnerId) {
+        // partnerId를 문자열로 통일 (타입 불일치 방지)
+        partnerId = String(partnerId);
         var favorites = this.getFavorites();
         return favorites.includes(partnerId);
     };
@@ -515,6 +526,8 @@
         var buttons = document.querySelectorAll('.pm-favorite-btn');
         buttons.forEach(function(btn) {
             var partnerId = btn.getAttribute('data-partner-id');
+            if (!partnerId) return; // partnerId가 없으면 스킵
+
             var isFav = self.isFavorite(partnerId);
 
             if (isFav) {
