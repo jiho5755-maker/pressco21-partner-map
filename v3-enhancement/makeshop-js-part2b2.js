@@ -316,6 +316,69 @@
                     // 13. Ripple 효과 초기화
                     setupRipple();
 
+                    // 13.5. 터치 서비스 초기화 (Mobile UX Phase 1)
+                    if (window.TouchService) {
+                        var touchService = new window.TouchService(CONFIG);
+                        window.touchServiceInstance = touchService;  // 전역 인스턴스 등록
+                        touchService.init();
+
+                        // Pull to Refresh 활성화
+                        touchService.enablePullToRefresh(document.body, {
+                            onRefresh: function() {
+                                console.log('[Touch] Pull to Refresh 실행');
+
+                                // 파트너 데이터 새로고침
+                                return apiClient.loadPartnerData(true)
+                                    .then(function(refreshedPartners) {
+                                        console.log('[Touch] 데이터 새로고침 완료:', refreshedPartners.length + '개');
+
+                                        // 필터 서비스 업데이트
+                                        if (filterService) {
+                                            filterService.setPartners(refreshedPartners);
+                                        }
+
+                                        // 지도 마커 업데이트
+                                        if (mapService) {
+                                            mapService.createMarkers(refreshedPartners);
+                                        }
+
+                                        // UI 업데이트
+                                        if (uiService) {
+                                            uiService.renderPartnerList(refreshedPartners);
+                                            uiService.showToast('데이터를 새로고침했습니다.', 'success');
+                                        }
+
+                                        // 필터 재적용
+                                        if (filterService) {
+                                            filterService.applyFilters();
+                                        }
+                                    })
+                                    .catch(function(error) {
+                                        console.error('[Touch] 새로고침 실패:', error);
+                                        if (uiService) {
+                                            uiService.showToast('새로고침에 실패했습니다.', 'error');
+                                        }
+                                    });
+                            }
+                        });
+
+                        // 지도 고급 제스처 활성화
+                        if (mapService && mapService.map) {
+                            touchService.enablePinchZoom(mapService.map);
+                            touchService.enableDoubleTapZoom(mapService.map);
+                        }
+
+                        console.log('[Main] 터치 서비스 초기화 완료');
+                    }
+
+                    // 13.6. FAB 서비스 초기화 (Mobile UX Phase 2)
+                    if (window.FABService) {
+                        var fabService = new window.FABService(CONFIG);
+                        window.fabServiceInstance = fabService;  // 전역 인스턴스 등록
+                        fabService.init();
+                        console.log('[Main] FAB 서비스 초기화 완료');
+                    }
+
                     // 14. URL 파라미터 처리 (특정 파트너 직접 접근)
                     handleUrlParams(partners);
 

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>파트너맵 v3 - Mobile UX Phase 2 테스트</title>
+
+    <!-- Phosphor Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css">
+
+    <!-- CSS (분할된 파일) -->
+    <link rel="stylesheet" href="makeshop-css-variables.css">
+    <link rel="stylesheet" href="makeshop-css-core.css">
+    <link rel="stylesheet" href="makeshop-css-touch.css">
+</head>
+<body>
+    <!-- 파트너맵 HTML -->
+    <div id="partnermap-container">
+        <div class="pm-hero">
+            <h1 class="pm-hero-title">Mobile UX Phase 2 테스트</h1>
+            <p class="pm-hero-subtitle">FAB, Pull to Refresh, 고급 제스처</p>
+        </div>
+
+        <!-- FAB 테스트 -->
+        <div class="pm-fab-container">
+            <button id="pm-fab-gps" class="pm-fab pm-fab-gps" aria-label="내 위치로 이동">
+                <i class="ph ph-crosshair"></i>
+            </button>
+            <button id="pm-fab-filter" class="pm-fab pm-fab-filter" aria-label="필터 열기">
+                <i class="ph ph-funnel"></i>
+            </button>
+            <button id="pm-fab-scroll-top" class="pm-fab pm-fab-scroll-top" aria-label="맨 위로 이동">
+                <i class="ph ph-arrow-up"></i>
+            </button>
+        </div>
+
+        <!-- Pull to Refresh 인디케이터 -->
+        <div id="pm-pull-indicator" class="pm-pull-indicator" style="display: none;">
+            <div class="pm-pull-spinner"></div>
+            <span class="pm-pull-text">새로고침하려면 당기세요</span>
+        </div>
+
+        <!-- 테스트 콘텐츠 -->
+        <div style="padding: 20px; min-height: 200vh;">
+            <h2>테스트 항목</h2>
+
+            <h3>1. FAB 버튼</h3>
+            <ul>
+                <li>✅ GPS FAB (우하단 첫 번째)</li>
+                <li>✅ 필터 FAB (우하단 두 번째)</li>
+                <li>✅ 맨 위로 FAB (우하단 세 번째, 스크롤 100px 이상 시 표시)</li>
+            </ul>
+
+            <h3>2. 스크롤 테스트</h3>
+            <p>아래로 스크롤하면 FAB가 숨겨지고, 위로 스크롤하면 다시 나타납니다.</p>
+            <p style="height: 600px; background: linear-gradient(to bottom, #E8F0E6, #A8BFA1);">
+                스크롤 영역
+            </p>
+
+            <h3>3. Pull to Refresh</h3>
+            <p>페이지 최상단으로 이동한 후, 화면을 아래로 당기세요.</p>
+
+            <h3>4. 맨 위로 버튼</h3>
+            <p>100px 이상 스크롤하면 맨 위로 버튼이 표시됩니다.</p>
+
+            <p style="height: 400px; background: linear-gradient(to bottom, #A8BFA1, #7D9675);">
+                추가 스크롤 영역
+            </p>
+
+            <p style="height: 400px; background: linear-gradient(to bottom, #7D9675, #5A6F52);">
+                더 아래로 스크롤
+            </p>
+        </div>
+    </div>
+
+    <!-- Fuse.js -->
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
+
+    <!-- 네이버 지도 SDK -->
+    <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=bfp8odep5r"></script>
+
+    <!-- 파트너맵 JS -->
+    <script src="makeshop-js-part1.js"></script>
+    <script src="makeshop-js-part2a.js"></script>
+    <script src="makeshop-js-part2b1.js"></script>
+    <script src="makeshop-js-touch.js"></script>
+
+    <!-- Phase 2 테스트 스크립트 -->
+    <script>
+        (function() {
+            'use strict';
+
+            console.log('[Test] Phase 2 테스트 시작');
+
+            // FAB 서비스 초기화
+            if (window.FABService) {
+                var fabService = new window.FABService({});
+                fabService.init();
+                console.log('[Test] FAB 서비스 초기화 완료');
+            }
+
+            // 터치 서비스 초기화
+            if (window.TouchService) {
+                var touchService = new window.TouchService({});
+                touchService.init();
+
+                // Pull to Refresh 테스트
+                touchService.enablePullToRefresh(document.body, {
+                    onRefresh: function() {
+                        console.log('[Test] Pull to Refresh 실행');
+
+                        return new Promise(function(resolve) {
+                            setTimeout(function() {
+                                console.log('[Test] 새로고침 완료');
+                                alert('새로고침이 완료되었습니다!');
+                                resolve();
+                            }, 2000);
+                        });
+                    }
+                });
+
+                console.log('[Test] 터치 서비스 초기화 완료');
+            }
+
+            // 테스트 정보 출력
+            setTimeout(function() {
+                console.log('[Test] ===== Phase 2 테스트 정보 =====');
+                console.log('[Test] 1. FAB 버튼: 우하단에 3개 표시');
+                console.log('[Test] 2. 스크롤 방향 감지: 아래로 스크롤 시 FAB 숨김');
+                console.log('[Test] 3. Pull to Refresh: 최상단에서 아래로 당기기');
+                console.log('[Test] 4. 맨 위로 버튼: 100px 이상 스크롤 시 표시');
+                console.log('[Test] ==================================');
+            }, 1000);
+        })();
+    </script>
+</body>
+</html>

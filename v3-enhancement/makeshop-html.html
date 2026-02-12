@@ -198,6 +198,24 @@
     <!-- 토스트 알림 컨테이너 -->
     <div id="pm-toast-container" class="pm-toast-container"></div>
 
+    <!-- FAB (Floating Action Button) - 모바일 전용 -->
+    <div class="pm-fab-container">
+        <!-- GPS FAB -->
+        <button id="pm-fab-gps" class="pm-fab pm-fab-gps" aria-label="내 위치로 이동" title="내 위치로 이동">
+            <i class="ph ph-crosshair" aria-hidden="true"></i>
+        </button>
+
+        <!-- 필터 FAB -->
+        <button id="pm-fab-filter" class="pm-fab pm-fab-filter" aria-label="필터 열기" title="필터 열기">
+            <i class="ph ph-funnel" aria-hidden="true"></i>
+        </button>
+
+        <!-- 맨 위로 FAB -->
+        <button id="pm-fab-scroll-top" class="pm-fab pm-fab-scroll-top" aria-label="맨 위로 이동" title="맨 위로 이동">
+            <i class="ph ph-arrow-up" aria-hidden="true"></i>
+        </button>
+    </div>
+
     <!-- 재사용 가능한 숨김 요소들 (createElement 제거용) -->
     <div id="pm-toast" class="pm-toast" style="display: none;"></div>
     <textarea id="pm-clipboard-helper" style="position: absolute; left: -9999px; opacity: 0;"></textarea>

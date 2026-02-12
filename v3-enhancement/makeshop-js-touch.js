@@ -461,9 +461,352 @@
     };
 
     // ========================================
+    // FAB (Floating Action Button) 시스템
+    // ========================================
+
+    /**
+     * FAB 서비스
+     * @param {Object} config - CONFIG 객체
+     */
+    function FABService(config) {
+        this.config = config || {};
+        this.lastScrollY = 0;
+        this.scrollThreshold = 100;
+        this.isVisible = true;
+        this.scrollDirection = 'up';
+        this.scrollTimer = null;
+    }
+
+    /**
+     * FAB 초기화
+     */
+    FABService.prototype.init = function() {
+        var self = this;
+
+        console.log('[FAB] FAB 서비스 초기화 시작');
+
+        // 모바일 감지
+        if (window.innerWidth >= 768) {
+            console.log('[FAB] 데스크톱 환경 - FAB 숨김');
+            return;
+        }
+
+        // GPS FAB 설정
+        self.setupGPSFAB();
+
+        // 필터 FAB 설정
+        self.setupFilterFAB();
+
+        // 맨 위로 FAB 설정
+        self.setupScrollTopFAB();
+
+        // 스크롤 이벤트 리스너
+        self.handleScroll = self.debounce(function() {
+            self.updateFABVisibility();
+        }, 100);
+
+        window.addEventListener('scroll', self.handleScroll, { passive: true });
+
+        console.log('[FAB] FAB 서비스 초기화 완료');
+    };
+
+    /**
+     * GPS FAB 설정
+     */
+    FABService.prototype.setupGPSFAB = function() {
+        var gpsFab = document.getElementById('pm-fab-gps');
+        if (!gpsFab) return;
+
+        gpsFab.addEventListener('click', function() {
+            // GPS 버튼 클릭 이벤트 트리거
+            var gpsBtn = document.getElementById('pm-gps-btn');
+            if (gpsBtn) {
+                gpsBtn.click();
+            }
+        });
+
+        console.log('[FAB] GPS FAB 설정 완료');
+    };
+
+    /**
+     * 필터 FAB 설정
+     */
+    FABService.prototype.setupFilterFAB = function() {
+        var filterFab = document.getElementById('pm-fab-filter');
+        if (!filterFab) return;
+
+        filterFab.addEventListener('click', function() {
+            // 필터 섹션으로 스크롤
+            var filterSection = document.querySelector('.pm-search-filter');
+            if (filterSection) {
+                filterSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+
+        console.log('[FAB] 필터 FAB 설정 완료');
+    };
+
+    /**
+     * 맨 위로 FAB 설정
+     */
+    FABService.prototype.setupScrollTopFAB = function() {
+        var scrollTopFab = document.getElementById('pm-fab-scroll-top');
+        if (!scrollTopFab) return;
+
+        scrollTopFab.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        console.log('[FAB] 맨 위로 FAB 설정 완료');
+    };
+
+    /**
+     * 스크롤 방향에 따른 FAB 가시성 업데이트
+     */
+    FABService.prototype.updateFABVisibility = function() {
+        var self = this;
+        var currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+        var scrollingDown = currentScrollY > self.lastScrollY;
+
+        // 스크롤 방향 감지
+        if (scrollingDown && currentScrollY > self.scrollThreshold) {
+            // 아래로 스크롤: FAB 숨김
+            self.hideFABs();
+        } else {
+            // 위로 스크롤: FAB 표시
+            self.showFABs();
+        }
+
+        // 맨 위로 버튼은 100px 이상 스크롤 시에만 표시
+        var scrollTopFab = document.getElementById('pm-fab-scroll-top');
+        if (scrollTopFab) {
+            if (currentScrollY > 100) {
+                scrollTopFab.style.display = 'flex';
+            } else {
+                scrollTopFab.style.display = 'none';
+            }
+        }
+
+        self.lastScrollY = currentScrollY;
+    };
+
+    /**
+     * FAB 숨김
+     */
+    FABService.prototype.hideFABs = function() {
+        var fabContainer = document.querySelector('.pm-fab-container');
+        if (fabContainer) {
+            fabContainer.classList.add('pm-fab-hidden');
+        }
+    };
+
+    /**
+     * FAB 표시
+     */
+    FABService.prototype.showFABs = function() {
+        var fabContainer = document.querySelector('.pm-fab-container');
+        if (fabContainer) {
+            fabContainer.classList.remove('pm-fab-hidden');
+        }
+    };
+
+    /**
+     * 디바운스 함수
+     */
+    FABService.prototype.debounce = function(func, wait) {
+        var timeout;
+        return function() {
+            var context = this;
+            var args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(function() {
+                func.apply(context, args);
+            }, wait);
+        };
+    };
+
+    // ========================================
+    // 고급 제스처 (핀치 줌, 더블탭)
+    // ========================================
+
+    /**
+     * 핀치 줌 활성화 (지도용)
+     * @param {Object} map - 네이버 지도 인스턴스
+     */
+    TouchService.prototype.enablePinchZoom = function(map) {
+        var self = this;
+        var initialDistance = 0;
+        var initialZoom = 0;
+
+        if (!map) return;
+
+        var mapElement = map.getElement();
+        if (!mapElement) return;
+
+        mapElement.addEventListener('touchstart', function(e) {
+            if (e.touches.length === 2) {
+                initialDistance = self.getDistance(e.touches[0], e.touches[1]);
+                initialZoom = map.getZoom();
+            }
+        }, { passive: true });
+
+        mapElement.addEventListener('touchmove', function(e) {
+            if (e.touches.length === 2) {
+                e.preventDefault();
+
+                var currentDistance = self.getDistance(e.touches[0], e.touches[1]);
+                var scale = currentDistance / initialDistance;
+
+                // 줌 레벨 계산 (scale > 1: 줌인, scale < 1: 줌아웃)
+                var zoomDelta = Math.log2(scale);
+                var newZoom = Math.round(initialZoom + zoomDelta);
+
+                // 줌 레벨 제한 (3 ~ 21)
+                newZoom = Math.max(3, Math.min(21, newZoom));
+
+                if (newZoom !== map.getZoom()) {
+                    map.setZoom(newZoom);
+                }
+            }
+        }, { passive: false });
+
+        console.log('[Touch] 핀치 줌 활성화');
+    };
+
+    /**
+     * 더블탭 줌인 활성화 (지도용)
+     * @param {Object} map - 네이버 지도 인스턴스
+     */
+    TouchService.prototype.enableDoubleTapZoom = function(map) {
+        var self = this;
+        var lastTap = 0;
+        var tapTimeout;
+
+        if (!map) return;
+
+        var mapElement = map.getElement();
+        if (!mapElement) return;
+
+        mapElement.addEventListener('touchend', function(e) {
+            var currentTime = Date.now();
+            var tapLength = currentTime - lastTap;
+
+            clearTimeout(tapTimeout);
+
+            if (tapLength < 300 && tapLength > 0) {
+                // 더블탭 감지
+                e.preventDefault();
+
+                // 터치 위치로 줌인
+                var touch = e.changedTouches[0];
+                var rect = mapElement.getBoundingClientRect();
+                var x = touch.clientX - rect.left;
+                var y = touch.clientY - rect.top;
+
+                // 화면 좌표를 지도 좌표로 변환
+                var projection = map.getProjection();
+                var coord = projection.fromPageXYToCoord(new naver.maps.Point(touch.pageX, touch.pageY));
+
+                // 줌인
+                map.setZoom(map.getZoom() + 1);
+                map.panTo(coord);
+
+                // 햅틱 피드백
+                self.hapticFeedback('light');
+
+                lastTap = 0;
+            } else {
+                lastTap = currentTime;
+            }
+        });
+
+        console.log('[Touch] 더블탭 줌인 활성화');
+    };
+
+    /**
+     * 두 터치 포인트 간 거리 계산
+     * @param {Touch} touch1 - 첫 번째 터치 포인트
+     * @param {Touch} touch2 - 두 번째 터치 포인트
+     * @returns {number} 거리 (픽셀)
+     */
+    TouchService.prototype.getDistance = function(touch1, touch2) {
+        var dx = touch1.clientX - touch2.clientX;
+        var dy = touch1.clientY - touch2.clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+    };
+
+    // ========================================
+    // Pull to Refresh 개선 (실제 통합)
+    // ========================================
+
+    /**
+     * Pull to Refresh 활성화 (개선 버전)
+     * @param {HTMLElement} element - 대상 요소
+     * @param {Object} options - 옵션 { onRefresh: Function }
+     */
+    TouchService.prototype.enablePullToRefresh = function(element, options) {
+        var self = this;
+
+        if (!element) {
+            console.warn('[Touch] Pull to Refresh 대상 요소 없음');
+            return;
+        }
+
+        var indicator = document.getElementById('pm-pull-indicator');
+        if (!indicator) {
+            self.createPullRefreshIndicator();
+            indicator = document.getElementById('pm-pull-indicator');
+        }
+
+        var indicatorText = indicator ? indicator.querySelector('.pm-pull-text') : null;
+        var spinner = indicator ? indicator.querySelector('.pm-pull-spinner') : null;
+
+        // Pull to Refresh 이벤트 등록
+        self.onPullRefresh(element, function(done) {
+            if (options && options.onRefresh) {
+                // 새로고침 함수 실행
+                var refreshPromise = options.onRefresh();
+
+                if (refreshPromise && refreshPromise.then) {
+                    // Promise 반환 시
+                    refreshPromise
+                        .then(function() {
+                            console.log('[Touch] Pull to Refresh 완료');
+                            if (indicatorText) {
+                                indicatorText.textContent = '새로고침 완료!';
+                            }
+                            setTimeout(function() {
+                                done();
+                            }, 500);
+                        })
+                        .catch(function(error) {
+                            console.error('[Touch] Pull to Refresh 오류:', error);
+                            if (indicatorText) {
+                                indicatorText.textContent = '새로고침 실패';
+                            }
+                            setTimeout(function() {
+                                done();
+                            }, 500);
+                        });
+                } else {
+                    // Promise 미반환 시
+                    setTimeout(function() {
+                        done();
+                    }, 1000);
+                }
+            } else {
+                done();
+            }
+        });
+
+        console.log('[Touch] Pull to Refresh 활성화 (실제 통합)');
+    };
+
+    // ========================================
     // 전역 등록
     // ========================================
 
     window.TouchService = TouchService;
+    window.FABService = FABService;
 
 })(window);

@@ -1,0 +1,153 @@
+/* 모바일 터치 최적화 */
+@media (max-width: 768px) {
+    /* 필터 탭 스와이프 힌트 */
+    #partnermap-container .pm-filter-tabs::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 30px;
+        background: linear-gradient(to left, var(--pm-bg-secondary), transparent);
+        pointer-events: none;
+    }
+
+    /* 모달 스와이프 닫기 핸들 */
+    #partnermap-container .pm-modal-content::before {
+        content: '';
+        position: absolute;
+        top: var(--pm-space-2);
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 4px;
+        background: var(--pm-gray-300);
+        border-radius: var(--pm-radius-full);
+    }
+
+    /* 터치 타겟 크기 확대 (WCAG 2.2) */
+    #partnermap-container button,
+    #partnermap-container .pm-filter-btn,
+    #partnermap-container .pm-favorite-btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+/* ========================================
+   FAB (Floating Action Button) - Phase 2
+   ======================================== */
+
+/* FAB 컨테이너 */
+#partnermap-container .pm-fab-container {
+    position: fixed;
+    right: var(--pm-space-4);
+    bottom: var(--pm-space-4);
+    z-index: var(--pm-z-fixed);
+    display: flex;
+    flex-direction: column;
+    gap: var(--pm-space-3);
+    transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms ease;
+}
+
+/* FAB 숨김 상태 */
+#partnermap-container .pm-fab-container.pm-fab-hidden {
+    transform: translateY(100px);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* FAB 버튼 (공통) */
+#partnermap-container .pm-fab {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--pm-primary);
+    color: var(--pm-text-inverse);
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 8px 24px rgba(125, 150, 117, 0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* FAB Hover */
+#partnermap-container .pm-fab:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), 0 12px 32px rgba(125, 150, 117, 0.3);
+}
+
+/* FAB Active */
+#partnermap-container .pm-fab:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* FAB 아이콘 */
+#partnermap-container .pm-fab i {
+    font-size: 24px;
+    line-height: 1;
+}
+
+/* GPS FAB */
+#partnermap-container .pm-fab-gps {
+    background: linear-gradient(135deg, var(--pm-primary) 0%, var(--pm-primary-dark) 100%);
+}
+
+/* 필터 FAB */
+#partnermap-container .pm-fab-filter {
+    background: linear-gradient(135deg, var(--pm-accent-blue) 0%, #4A6A8F 100%);
+}
+
+/* 맨 위로 FAB */
+#partnermap-container .pm-fab-scroll-top {
+    background: linear-gradient(135deg, var(--pm-secondary) 0%, var(--pm-secondary-dark) 100%);
+    display: none; /* 스크롤 100px 이상일 때만 표시 */
+}
+
+/* FAB 리플 효과 (Material Design) */
+#partnermap-container .pm-fab::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+#partnermap-container .pm-fab:active::before {
+    width: 120%;
+    height: 120%;
+}
+
+/* 데스크톱에서 FAB 숨김 */
+@media (min-width: 769px) {
+    #partnermap-container .pm-fab-container {
+        display: none;
+    }
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+    #partnermap-container .pm-fab-container {
+        right: var(--pm-space-3);
+        bottom: var(--pm-space-3);
+    }
+
+    #partnermap-container .pm-fab {
+        width: 52px;
+        height: 52px;
+    }
+
+    #partnermap-container .pm-fab i {
+        font-size: 22px;
+    }
+}
