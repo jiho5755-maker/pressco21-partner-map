@@ -1,44 +1,75 @@
 # 메이크샵 배포 파일 (Phase 1 완료)
 
+## ⚠️ 중요: 배포 방식 선택
+
+메이크샵 페이지 배포 방식에는 **2가지**가 있습니다:
+
+1. **페이지 탭 방식** (HTML/CSS/JS 탭) → `즉시배포-단계별가이드.md` 참조 ⭐
+2. **파일 업로드 방식** (/upload/ 폴더) → `DEPLOY-GUIDE.md` 참조
+
+**대부분의 경우 1번(페이지 탭)을 사용합니다.**
+
+---
+
 ## 📦 파일 목록
 
 ```
 makeshop-deploy/
-├── 01-html.html          (9.9KB)  ✅ HTML 탭에 복사
-├── 02-css.css            (26KB)   ✅ CSS 탭에 복사
-├── 03-js-part1.js        (24KB)   ✅ 파일 업로드
-├── 03-js-part2.js        (37KB)   ⚠️ 파일 업로드 (30KB 초과)
-├── 03-js-part3.js        (31KB)   ⚠️ 파일 업로드 (30KB 초과)
-├── DEPLOY-GUIDE.md                 배포 가이드 (상세)
-└── README.md                       이 파일
+├── 01-html.html                      (10KB)  ✅ HTML 탭
+├── 02-css.css                        (26KB)  ✅ CSS 탭
+├── 03-js-part1.js                    (24KB)  ✅ 파일 업로드
+├── 03-js-part2.js                    (37KB)  ⚠️ 파일 업로드 (30KB 초과)
+├── 03-js-part3.js                    (31KB)  ⚠️ 파일 업로드 (30KB 초과)
+├── 즉시배포-단계별가이드.md          ⭐ 페이지 탭 배포 (권장)
+├── 메이크샵-페이지-탭-배포가이드.md  📊 문제 분석 (Sequential Thinking)
+├── DEPLOY-GUIDE.md                      배포 가이드 (파일 업로드 방식)
+└── README.md                            이 파일
 ```
 
-## 🚀 빠른 배포 (5분)
+## 🚀 빠른 배포 (12분)
 
-### 1단계: HTML 탭
+### ⭐ 권장: 페이지 탭 방식
+
+**`즉시배포-단계별가이드.md` 파일을 참조하세요!**
+
+간단 요약:
+1. 네이버 클라우드에 `https://www.foreverlove.co.kr/*` URL 추가 (2분)
+2. 메이크샵 파일 관리에 JS 파일 업로드 (5분)
+3. 페이지 HTML/CSS 탭에 코드 붙여넣기 (3분)
+4. 스크립트 태그 추가 및 테스트 (2분)
+
+---
+
+### 대안: 파일 업로드 방식 (고급 사용자)
+
+**⚠️ 주의**: 이 방식은 메이크샵 "디자인 관리" 전체 페이지에 적용됩니다. 개별 페이지에는 위의 "페이지 탭 방식"을 사용하세요.
+
+#### 1단계: HTML 탭
 ```
 메이크샵 관리자 > 디자인 관리 > HTML 탭
 01-html.html 전체 복사 → <body> 안에 붙여넣기
 ```
 
-### 2단계: CSS 탭
+#### 2단계: CSS 탭
 ```
 메이크샵 관리자 > 디자인 관리 > CSS 탭
 02-css.css 전체 복사 → 붙여넣기
 저장
 ```
 
-### 3단계: JS 파일 업로드
+#### 3단계: JS 파일 업로드
 ```
 메이크샵 관리자 > 파일 관리 > 파일 업로드
 
-📁 /upload/partnermap/ 폴더 생성
+📁 /upload/파트너맵/ 폴더 생성
   ├─ js-part1.js (03-js-part1.js 업로드)
   ├─ js-part2.js (03-js-part2.js 업로드)
   └─ js-part3.js (03-js-part3.js 업로드)
 ```
 
-### 4단계: HTML 탭에 스크립트 추가
+**⚠️ 중요**: 폴더명이 정확히 `파트너맵`이어야 합니다!
+
+#### 4단계: HTML 탭에 스크립트 추가
 ```html
 <!-- <body> 끝나기 직전에 순서대로 추가 -->
 
@@ -46,17 +77,17 @@ makeshop-deploy/
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
 
 <!-- 2. 네이버 지도 SDK (반드시 JS 파일들보다 먼저!) -->
-<script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=bfp8odep5r"></script>
+<script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=bfp8odep5r"></script>
 
 <!-- 3. 파트너맵 JS 파일들 -->
-<script src="/upload/partnermap/js-part1.js"></script>
-<script src="/upload/partnermap/js-part2.js"></script>
-<script src="/upload/partnermap/js-part3.js"></script>
+<script src="/upload/파트너맵/js-part1.js"></script>
+<script src="/upload/파트너맵/js-part2.js"></script>
+<script src="/upload/파트너맵/js-part3.js"></script>
 ```
 
 ⚠️ **중요**: 순서를 지켜야 네이버 지도가 정상 작동합니다!
 
-### 5단계: 저장 및 테스트
+#### 5단계: 저장 및 테스트
 ```
 저장 → 미리보기 → 동작 확인
 ```
