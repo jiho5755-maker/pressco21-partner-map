@@ -9,18 +9,24 @@
 ================================================
 -->
 
-<!-- Fuse.js (검색 라이브러리) -->
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
-
 <!-- Phosphor Icons -->
 <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css">
 <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/fill/style.css">
 
-<!-- 네이버 지도 SDK (ncpKeyId 인증) -->
-<script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=bfp8odep5r"></script>
-
 <!-- ========================================
      메인 컨테이너 (CSS 스코핑)
+
+     ⚠️ 중요: <body> 끝나기 직전에 다음 스크립트들을 순서대로 추가하세요
+     1. Fuse.js
+     2. 네이버 지도 SDK
+     3. JS Part 1, 2, 3
+
+     예시:
+     <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
+     <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=bfp8odep5r"></script>
+     <script src="/upload/파트너맵/js-part1.js"></script>
+     <script src="/upload/파트너맵/js-part2.js"></script>
+     <script src="/upload/파트너맵/js-part3.js"></script>
      ======================================== -->
 <div id="partnermap-container">
 

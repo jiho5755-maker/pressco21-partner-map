@@ -40,11 +40,21 @@ makeshop-deploy/
 
 ### 4단계: HTML 탭에 스크립트 추가
 ```html
-<!-- 01-html.html </div> 닫는 태그 바로 아래에 추가 -->
+<!-- <body> 끝나기 직전에 순서대로 추가 -->
+
+<!-- 1. Fuse.js (검색 라이브러리) -->
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
+
+<!-- 2. 네이버 지도 SDK (반드시 JS 파일들보다 먼저!) -->
+<script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=bfp8odep5r"></script>
+
+<!-- 3. 파트너맵 JS 파일들 -->
 <script src="/upload/partnermap/js-part1.js"></script>
 <script src="/upload/partnermap/js-part2.js"></script>
 <script src="/upload/partnermap/js-part3.js"></script>
 ```
+
+⚠️ **중요**: 순서를 지켜야 네이버 지도가 정상 작동합니다!
 
 ### 5단계: 저장 및 테스트
 ```
