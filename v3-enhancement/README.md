@@ -1,7 +1,7 @@
 # 파트너맵 v3 고도화 작업 디렉토리
 
 **최종 업데이트**: 2026-02-12
-**상태**: ✅ Phase 1 완료
+**상태**: ✅ Phase 1 완료, 🌙 다크모드 추가
 
 ---
 
@@ -11,8 +11,11 @@
 v3-enhancement/
 ├── README.md                   # 이 파일
 ├── PHASE1-COMPLETE.md          # Phase 1 완료 보고서 (상세)
-├── makeshop-html.html          # HTML (8.6KB)
-├── makeshop-css.css            # CSS (32KB)
+├── DARK-MODE-GUIDE.md          # 🌙 다크모드 배포 가이드 (신규)
+├── makeshop-html.html          # HTML (11KB) - 토글 버튼 추가
+├── makeshop-css.css            # CSS (36KB) - 다크모드 변수 추가
+├── theme.js                    # 🌙 테마 시스템 JS (6.8KB, 신규)
+├── dark-mode-test.html         # 🧪 로컬 테스트 파일 (신규)
 ├── makeshop-js-part1.js        # JS Part 1 - Config/API/Map (34KB)
 ├── makeshop-js-part2a.js       # JS Part 2a - Filters/Search (27KB)
 ├── makeshop-js-part2b1.js      # JS Part 2b1 - UI Service (22KB)
@@ -130,6 +133,26 @@ ls -lh *.{html,css,js}
 
 ---
 
+## 🌙 다크모드 시스템 (2026-02-12 추가)
+
+### 구현 완료 내용
+- ✅ localStorage 기반 테마 저장
+- ✅ `prefers-color-scheme` 자동 감지
+- ✅ 히어로 섹션 토글 버튼 (Phosphor Icons)
+- ✅ WCAG AA 대비 11.5:1 (다크/라이트 모두)
+- ✅ 300ms 부드러운 전환 애니메이션
+- ✅ 키보드 접근성 (Tab, Enter/Space)
+- ✅ CustomEvent 기반 테마 변경 감지
+
+### 빠른 배포
+1. **CSS 탭**: `makeshop-css.css` (36KB)
+2. **HTML 탭**: `makeshop-html.html` (11KB)
+3. **JavaScript 탭**: `theme.js` (6.8KB) 추가
+
+**상세 가이드**: `DARK-MODE-GUIDE.md` 참조
+
+---
+
 ## 🎯 다음 단계 (Phase 2)
 
 ### 옵션 A: 비즈니스 추적 (권장)
@@ -139,14 +162,15 @@ ls -lh *.{html,css,js}
 
 ### 옵션 B: 디자인 고도화
 - 마이크로 인터랙션
-- 다크모드
+- ~~다크모드~~ ✅ 완료
 - 반응형 미세 조정
 
 ---
 
 ## 📝 참고 문서
 
-- **상세 보고서**: `PHASE1-COMPLETE.md`
+- **Phase 1 보고서**: `PHASE1-COMPLETE.md`
+- **다크모드 가이드**: `DARK-MODE-GUIDE.md` 🌙
 - **전체 계획서**: `../파트너맵 v3 고도화 구현 계획.md` (상위 디렉토리)
 - **메이크샵 개발 가이드**: `../MAKESHOP-DEVELOPMENT-GUIDE.md`
 

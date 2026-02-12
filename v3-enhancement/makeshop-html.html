@@ -12,6 +12,9 @@
 <!-- 네이버 지도 SDK (동적 로딩 대신 직접 로드) -->
 <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=bfp8odep5r"></script>
 
+<!-- 테마 시스템 (메이크샵 JS 전용 탭에 업로드 필요) -->
+<!-- <script src="theme.js"></script> -->
+
 <!-- 메인 컨테이너 -->
 <div id="partnermap-container">
 
@@ -25,6 +28,12 @@
     <section class="pm-hero">
         <h1 class="pm-hero-title">전국 제휴 업체 지도</h1>
         <p class="pm-hero-subtitle">프레스코21과 함께하는 압화·플라워디자인 업체를 찾아보세요</p>
+
+        <!-- 테마 토글 버튼 -->
+        <button id="pm-theme-toggle" class="pm-theme-toggle" aria-label="다크 모드로 전환" title="다크 모드로 전환">
+            <i class="ph ph-sun pm-theme-icon pm-theme-icon-sun" style="display: none;" aria-hidden="true"></i>
+            <i class="ph ph-moon pm-theme-icon pm-theme-icon-moon" aria-hidden="true"></i>
+        </button>
     </section>
 
     <!-- 검색 및 필터 영역 -->

@@ -305,6 +305,7 @@
                '<div class="pm-partner-logo">' +
                '<img src="' + logoUrl + '" ' +
                'alt="' + escapedName + '" ' +
+               'loading="lazy" ' +
                'onerror="this.src=&quot;' + self.config.defaultLogoPath + '&quot;">' +
                '</div>' +
                '<div class="pm-partner-info">' +
@@ -356,6 +357,7 @@
         var html = '<div class="pm-modal-header">' +
                    '<img src="' + logoUrl + '" ' +
                    'alt="' + escapedName + '" ' +
+                   'loading="lazy" ' +
                    'onerror="this.src=&quot;' + self.config.defaultLogoPath + '&quot;">' +
                    '<h2 id="pm-modal-title">' + escapedName + '</h2>' +
                    (categoryTags ? '<div class="pm-partner-categories">' + categoryTags + '</div>' : '') +

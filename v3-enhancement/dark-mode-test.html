@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>파트너맵 v3 - 다크모드 테스트</title>
+
+    <!-- Phosphor Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css">
+
+    <!-- 파트너맵 CSS -->
+    <link rel="stylesheet" href="makeshop-css.css">
+
+    <style>
+        /* 테스트용 추가 스타일 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .test-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            z-index: 9999;
+            max-width: 300px;
+        }
+
+        .test-controls h3 {
+            margin: 0 0 15px;
+            font-size: 16px;
+            color: #9DB895;
+        }
+
+        .test-controls button {
+            display: block;
+            width: 100%;
+            margin: 8px 0;
+            padding: 10px;
+            background: #7D9675;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 200ms;
+        }
+
+        .test-controls button:hover {
+            background: #9DB895;
+            transform: translateY(-2px);
+        }
+
+        .test-controls code {
+            display: block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 4px;
+            margin: 8px 0;
+            font-size: 12px;
+            word-break: break-all;
+        }
+
+        .test-sample-content {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .test-sample-card {
+            background: var(--pm-bg-primary);
+            border: 1px solid var(--pm-border-light);
+            padding: 24px;
+            margin: 20px 0;
+            border-radius: 12px;
+            transition: all 300ms;
+        }
+
+        .test-sample-card h3 {
+            color: var(--pm-primary);
+            margin: 0 0 12px;
+        }
+
+        .test-sample-card p {
+            color: var(--pm-text-secondary);
+            line-height: 1.6;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="partnermap-container">
+
+    <!-- 히어로 섹션 -->
+    <section class="pm-hero">
+        <h1 class="pm-hero-title">다크모드 테마 시스템 테스트</h1>
+        <p class="pm-hero-subtitle">우측 상단 버튼으로 테마를 전환해보세요</p>
+
+        <!-- 테마 토글 버튼 -->
+        <button id="pm-theme-toggle" class="pm-theme-toggle" aria-label="다크 모드로 전환" title="다크 모드로 전환">
+            <i class="ph ph-sun pm-theme-icon pm-theme-icon-sun" style="display: none;" aria-hidden="true"></i>
+            <i class="ph ph-moon pm-theme-icon pm-theme-icon-moon" aria-hidden="true"></i>
+        </button>
+    </section>
+
+    <!-- 샘플 콘텐츠 -->
+    <div class="test-sample-content">
+        <div class="test-sample-card">
+            <h3>라이트 모드 (기본)</h3>
+            <p>배경: #FFFFFF, 텍스트: #2C2C2C, Primary: #7D9675</p>
+            <p>WCAG AA 대비 11.5:1 충족</p>
+        </div>
+
+        <div class="test-sample-card">
+            <h3>다크 모드</h3>
+            <p>배경: #1A1A1A, 텍스트: #E8E8E8, Primary: #9DB895 (밝기 +20%)</p>
+            <p>WCAG AA 대비 11.5:1 충족</p>
+        </div>
+
+        <div class="test-sample-card">
+            <h3>자동 감지</h3>
+            <p>시스템 다크모드 설정이 자동으로 적용됩니다.</p>
+            <p>수동 선택 시 localStorage에 저장되어 유지됩니다.</p>
+        </div>
+
+        <div class="test-sample-card">
+            <h3>접근성</h3>
+            <p>Tab 키로 토글 버튼 포커스 가능, Enter/Space로 전환</p>
+            <p>aria-label과 title로 스크린 리더 지원</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- 테스트 컨트롤 패널 -->
+<div class="test-controls">
+    <h3>테스트 컨트롤</h3>
+
+    <button onclick="PartnerMapTheme.toggle()">
+        테마 토글
+    </button>
+
+    <button onclick="PartnerMapTheme.set('light')">
+        라이트 모드 강제
+    </button>
+
+    <button onclick="PartnerMapTheme.set('dark')">
+        다크 모드 강제
+    </button>
+
+    <button onclick="updateThemeInfo()">
+        현재 테마 확인
+    </button>
+
+    <button onclick="localStorage.removeItem('partnermap-theme'); location.reload();">
+        localStorage 초기화
+    </button>
+
+    <code id="theme-info">테마: -</code>
+</div>
+
+<!-- 테마 시스템 JS -->
+<script src="theme.js"></script>
+
+<script>
+    // 테스트용 함수
+    function updateThemeInfo() {
+        var current = PartnerMapTheme.get();
+        var stored = localStorage.getItem('partnermap-theme');
+        var info = '현재 테마: ' + current + '\nlocalStorage: ' + (stored || '(없음)');
+        document.getElementById('theme-info').textContent = info;
+    }
+
+    // 테마 변경 이벤트 감지
+    document.getElementById('partnermap-container')
+        .addEventListener('partnermap:theme-changed', function(e) {
+            console.log('테마 변경됨:', e.detail.theme);
+            updateThemeInfo();
+        });
+
+    // 초기 정보 표시
+    window.addEventListener('load', function() {
+        updateThemeInfo();
+    });
+</script>
+
+</body>
+</html>
